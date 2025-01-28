@@ -1,0 +1,216 @@
+services:
+  redis-server:
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/redis-server
+    restart: on-failure
+    volumes:
+      - redis_socket_vol:/run/redis/
+
+  pg-gvm:
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/pg-gvm:22.6.5
+    restart: on-failure
+    volumes:
+      - psql_data_vol:/var/lib/postgresql
+      - psql_socket_vol:/var/run/postgresql
+
+  gvmd:
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/gvmd:23.8.1
+    restart: on-failure
+    volumes:
+      - gvmd_data_vol:/var/lib/gvm
+      - scap_data_vol:/var/lib/gvm/scap-data/
+      - cert_data_vol:/var/lib/gvm/cert-data
+      - data_objects_vol:/var/lib/gvm/data-objects/gvmd
+      - vt_data_vol:/var/lib/openvas/plugins
+      - notus_data_vol:/var/lib/notus
+      - psql_data_vol:/var/lib/postgresql
+      - gvmd_socket_vol:/run/gvmd
+      - ospd_openvas_socket_vol:/run/ospd
+      - psql_socket_vol:/var/run/postgresql
+      - shared-data:/shared
+    depends_on:
+      pg-gvm:
+        condition: service_started
+
+  gsa:
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/gsa:23.2.1
+    restart: on-failure
+    ports:
+      - 9392:80
+    volumes:
+      - gvmd_socket_vol:/run/gvmd
+    depends_on:
+      - gvmd
+  # Sets log level of openvas to the set LOG_LEVEL within the env
+  # and changes log output to /var/log/openvas instead /var/log/gvm
+  # to reduce likelyhood of unwanted log interferences
+  configure-openvas:
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/openvas-scanner:23.8.2
+    volumes:
+      - openvas_data_vol:/mnt
+      - openvas_log_data_vol:/var/log/openvas
+    command:
+      - /bin/sh
+      - -c
+      - |
+        printf "table_driven_lsc = yes\nopenvasd_server = http://openvasd:80\ntest_alive_hosts_only = yes\nmax_vts_timeouts = 5" > /mnt/openvas.conf
+        sed "s/127/128/" /etc/openvas/openvas_log.conf | sed 's/gvm/openvas/' > /mnt/openvas_log.conf
+        chmod 644 /mnt/openvas.conf
+        chmod 644 /mnt/openvas_log.conf
+        touch /var/log/openvas/openvas.log
+        chmod 666 /var/log/openvas/openvas.log
+
+  # shows logs of openvas
+  openvas:
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/openvas-scanner:23.8.2
+    restart: on-failure
+    volumes:
+      - openvas_data_vol:/etc/openvas
+      - openvas_log_data_vol:/var/log/openvas
+    command:
+      - /bin/sh
+      - -c
+      - |
+        cat /etc/openvas/openvas.conf
+        tail -f /var/log/openvas/openvas.log
+    depends_on:
+      configure-openvas:
+        condition: service_completed_successfully
+
+  openvasd:
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/openvas-scanner:23.8.2
+    restart: on-failure
+    environment:
+      # `service_notus` is set to disable everything but notus,
+      # if you want to utilize openvasd directly removed `OPENVASD_MODE`
+      OPENVASD_MODE: service_notus
+      GNUPGHOME: /etc/openvas/gnupg
+      LISTENING: 0.0.0.0:80
+    command:
+      - /bin/sh
+      - -c
+      - |
+        /usr/local/bin/openvasd  --ospd-socket /run/ospd/ospd-openvas.sock
+    volumes:
+      - openvas_data_vol:/etc/openvas
+      - openvas_log_data_vol:/var/log/openvas
+      - notus_data_vol:/var/lib/notus
+      - ospd_openvas_socket_vol:/run/ospd
+    # enable port forwarding when you want to use the http api from your host machine
+    # ports:
+    #   - 127.0.0.1:3000:80
+    depends_on:
+      # vulnerability-tests:
+      #   condition: service_completed_successfully
+      configure-openvas:
+        condition: service_completed_successfully
+    networks:
+      default:
+        aliases:
+          - openvasd
+
+  ospd-openvas:
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/ospd-openvas:22.7.1
+    restart: on-failure
+    hostname: ospd-openvas.local
+    cap_add:
+      - NET_ADMIN # for capturing packages in promiscuous mode
+      - NET_RAW # for raw sockets e.g. used for the boreas alive detection
+    security_opt:
+      - seccomp=unconfined
+      - apparmor=unconfined
+    command:
+      [
+        "ospd-openvas",
+        "-f",
+        "--config",
+        "/etc/gvm/ospd-openvas.conf",
+        "--notus-feed-dir",
+        "/var/lib/notus/advisories",
+        "-m",
+        "666"
+      ]
+    volumes:
+      - vt_data_vol:/var/lib/openvas/plugins
+      - notus_data_vol:/var/lib/notus
+      - ospd_openvas_socket_vol:/run/ospd
+      - redis_socket_vol:/run/redis/
+      - openvas_data_vol:/etc/openvas/
+      - openvas_log_data_vol:/var/log/openvas
+    depends_on:
+      redis-server:
+        condition: service_started
+      configure-openvas:
+        condition: service_completed_successfully
+
+  gvm-tools:
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/gvm-tools
+    volumes:
+      - gvmd_socket_vol:/run/gvmd
+      - ospd_openvas_socket_vol:/run/ospd
+    depends_on:
+      - gvmd
+      - ospd-openvas
+
+  index-fix:
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/index-fix:1.0
+    restart: no
+    volumes:
+      - psql_socket_vol:/var/run/postgresql
+      - psql_data_vol:/var/lib/postgresql
+    depends_on:
+      - pg-gvm
+  ovasagent:
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/ovasagent:2.1.2
+    ports:
+      - 9081:9081
+    environment:
+      GVM_CLI_USERNAME: admin
+      UNI5_API_URL: "${UNI5_API_URL}"
+      UNI5_API_KEY: "${UNI5_API_KEY}"
+      API_KEY: "${API_KEY}"          
+      PROFILE: "production"
+      # SPRING_PROFILES_ACTIVE:"production" // For Setting the ACTIVE PROFILE 
+    volumes:
+      - vt_data_vol:/var/lib/openvas/plugins:z
+      - notus_data_vol:/var/lib/notus:z
+      - gvmd_data_vol:/var/lib/gvm:z
+      - scap_data_vol:/var/lib/gvm/scap-data:z
+      - cert_data_vol:/var/lib/gvm/cert-data:z
+      - data_objects_vol:/var/lib/gvm/data-objects/gvmd:z
+      - gvmd_socket_vol:/run/gvmd:z
+      - ospd_openvas_socket_vol:/run/ospd:z
+      - shared-data:/shared:z
+    depends_on:
+      - gvmd
+  outboundagent:
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/outboundagent:2.1.0
+    environment:
+      KRONOS_API_URL: "${KRONOS_API_URL}"
+      KRONOS_API_KEY: "${KRONOS_API_KEY}"
+
+      # SPRING_PROFILES_ACTIVE: ""
+    ports:
+      - 8081:8081
+      - 8083:8083
+
+
+
+
+
+
+volumes:
+  scap_data_vol:
+  cert_data_vol:
+  data_objects_vol:
+  gvmd_data_vol:
+  psql_data_vol:
+  vt_data_vol:
+  notus_data_vol:
+  psql_socket_vol:
+  gvmd_socket_vol:
+  ospd_openvas_socket_vol:
+  redis_socket_vol:
+  openvas_data_vol:
+  openvas_log_data_vol:
+  shared-data:
+
