@@ -325,8 +325,8 @@ services:
     volumes:
       - postgresql_vol:/var/lib/postgresql
       - postgresql_data_vol:/var/lib/postgresql/data    
-  # burp:
-  #   image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/burp-suite-pro-activated:1.0.1
+  burp:
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/burp-suite-pro-activated:1.0.1
     # ports: 
     #  - 9991:9991 # Burp API
     #  - 5900:5900 #VNC Client
