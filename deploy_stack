@@ -1,0 +1,190 @@
+#! /bin/bash
+cd $HOME
+set -a
+
+GITHUB_REPOSITORY=readonlyuserhivepro/scanner-docker-images.git
+GITHUB_USER=readonlyuser
+HVS_DIR="HVS"
+ASPM_DIR="ASPM"
+FULLSTACK_DIR="."
+
+clone_repo()
+{
+    if [[ ! -d $HOME/scanner-docker-images ]];
+    then
+        echo "GitHub Repository is not present locally, proceeding to cloning the Repository"
+        read -p "Enter the PAT token for GitHub: " ghpat
+        git clone https://oauth2:${ghpat}@github.com/${GITHUB_REPOSITORY}
+        cd $HOME/scanner-docker-images
+    else
+        echo "Directory already Present. Checking GitHub for latest Changes"
+        cd $HOME/scanner-docker-images
+        git pull origin github-master
+    fi
+}
+
+check_aws_profile() {
+    local profile_name="$1"
+    aws configure list --profile "$profile_name" &>/dev/null
+}
+
+configure_docker_aws_cli()
+{
+    AWS_CLI_VERSION=$(aws --version 2>&1 | cut -d " " -f1 | cut -d "/" -f2)
+    if [ -z "${AWS_CLI_VERSION}" ]; then
+        echo "AWS CLI is not installed. Please Install AWS CLI Before Proceeding"
+        echo "HINT: Follow the following steps manually  on terminal to install AWS CLI"
+        echo 'curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip && sudo ./aws/install'
+        exit 1
+    fi
+    echo "Configuring Docker and AWS CLI Connection"
+    # Prompt user for profile name
+    profile_name="hivepro"
+    if check_aws_profile "$profile_name"; then
+        echo "Profile '$profile_name' already exists. Skipping credential update."
+    else
+        echo "Profile '$profile_name' not found. Creating a new profile."
+    
+       read -p "Enter AWS Access Key ID: " aws_access_key
+       read -s -p "Enter AWS Secret Access Key: " aws_secret_key
+       echo
+       read -p "Enter AWS region (default: us-east-1): " aws_region
+       aws_region=${aws_region:-us-east-1} 
+       aws configure set aws_access_key_id "$aws_access_key" --profile "$profile_name"
+       aws configure set aws_secret_access_key "$aws_secret_key" --profile "$profile_name"
+       aws configure set region "$aws_region" --profile "$profile_name"
+       echo "Profile '$profile_name' has been created successfully."
+    fi
+}
+
+
+# Function to create the .env file for HVS
+create_hvs_env() {
+    if [[ ! -f $HVS_DIR/.env ]];
+    then 
+        echo "Setting up HVS environment variables..."
+        read -p "Enter UNI5_API_URL: " UNI5_API_URL
+        read -p "Enter UNI5_API_KEY: " UNI5_API_KEY
+        echo
+    # Write to .env file
+    cat <<EOF > "$HVS_DIR/.env"
+UNI5_API_URL=$UNI5_API_URL
+UNI5_API_KEY=$UNI5_API_KEY
+EOF
+    echo "HVS .env file created at $HVS_DIR/.env"
+    echo "$HVS_DIR/.env" >> $HOME/scanner-docker-images/.gitignore
+    else
+        echo "Platform Variables are already Configured... Proceeding with next steps"
+    fi
+}
+# Function to create the .env file for ASPM
+create_aspm_env() {
+    if [[ ! -f $ASPM_DIR/.env ]];
+    then     
+        echo "Setting up ASPM environment variables..."
+        read -p "Enter CLIENTID: " CLIENTID
+        read -p "Enter CLIENTSECRET: " CLIENTSECRET
+        echo
+        read -p "Enter UNI5XPOSUREHOST: " UNI5XPOSUREHOST
+    # Write to .env file
+    cat <<EOF > "$ASPM_DIR/.env"
+CLIENTID=$CLIENTID
+CLIENTSECRET=$CLIENTSECRET
+UNI5XPOSUREHOST=$UNI5XPOSUREHOST
+EOF
+        echo "ASPM .env file created at $ASPM_DIR/.env"
+        echo "$ASPM_DIR/.env" >> $HOME/scanner-docker-images/.gitignore
+    else
+        echo "Platform Variables are already Configured... Proceeding with next steps"
+    fi    
+}
+# Function to create the .env file for root (both modules)
+create_root_env() {
+    if [[ ! -f $FULLSTACK_DIR/.env ]];
+    then     
+        echo "Setting up Root environment variables (HVS + ASPM)..."
+        read -p "Enter UNI5_API_URL: " UNI5_API_URL
+        read -s -p "Enter UNI5_API_KEY: " UNI5_API_KEY
+        echo
+        read -p "Enter CLIENTID: " CLIENTID
+        read -s -p "Enter CLIENTSECRET: " CLIENTSECRET
+        echo
+        read -p "Enter UNI5XPOSUREHOST: " UNI5XPOSUREHOST
+    # Write to .env file
+    cat <<EOF > "$FULLSTACK_DIR/.env"
+UNI5_API_URL=$UNI5_API_URL
+UNI5_API_KEY=$UNI5_API_KEY
+CLIENTID=$CLIENTID
+CLIENTSECRET=$CLIENTSECRET
+UNI5XPOSUREHOST=$UNI5XPOSUREHOST
+EOF
+        echo "Root .env file created at $FULLSTACK_DIR/.env"
+        echo "$FULLSTACK_DIR/.env" >> $HOME/scanner-docker-images/.gitignore
+    else
+        echo "Platform Variables are already Configured... Proceeding with next steps"
+    fi   
+}
+# Function to deploy the Docker Compose stack
+deploy_stack() {
+    local module="$1"
+    local dir="$2"
+    echo "Deploying $module stack using docker compose..."
+    if [[ $dir == "." ]];
+    then
+        module="autovm"
+        
+    else 
+        module=$(echo "$dir" | awk '{print tolower($0)}')
+    fi
+    echo "Deploying $module"
+    cd "$dir" && docker compose -p $module --env-file .env up -d
+    
+    if [ $? -eq 0 ]; then
+        echo "$module stack deployed successfully!"
+    else
+        echo "Failed to deploy $module stack. Check logs for details."
+        exit 1
+    fi
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+echo  -e "\033[33;5;7mPLEASE ENSURE THAT YOU HAVE DOCKER,GIT AND AWS CLI INSTALLED BEFORE PROCEEDING WITH INSTALLATION\033[0m"
+clone_repo
+configure_docker_aws_cli
+echo "Select the module to deploy:"
+echo "1) HVS"
+echo "2) ASPM"
+echo "3) Both"
+read -p "Enter your choice (1/2/3): " choice
+case "$choice" in
+    1)
+        create_hvs_env
+        deploy_stack "HVS" "$HVS_DIR"
+        ;;
+    2)
+        create_aspm_env
+        deploy_stack "ASPM" "$ASPM_DIR"
+        ;;
+    3)
+        create_root_env
+        deploy_stack "Both (Root)" "$FULLSTACK_DIR"
+        ;;
+    *)
+        echo "Invalid choice. Exiting."
+        exit 1
+        ;;
+esac
+echo "Deployment complete!"

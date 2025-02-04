@@ -166,7 +166,7 @@ services:
       GVM_CLI_USERNAME: admin
       UNI5_API_URL: "${UNI5_API_URL}"
       UNI5_API_KEY: "${UNI5_API_KEY}"
-      API_KEY: "${API_KEY}"     
+      # API_KEY: "${API_KEY}"     
       PROFILE: "production"
       # SPRING_PROFILES_ACTIVE:"production" // For Setting the ACTIVE PROFILE 
     volumes:
