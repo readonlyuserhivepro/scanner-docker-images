@@ -84,7 +84,6 @@ create_aspm_env() {
         echo "Setting up ASPM environment variables..."
         read -p "Enter CLIENTID: " CLIENTID
         read -p "Enter CLIENTSECRET: " CLIENTSECRET
-        echo
         read -p "Enter UNI5XPOSUREHOST: " UNI5XPOSUREHOST
     # Write to .env file
     cat <<EOF > "$ASPM_DIR/.env"
@@ -108,7 +107,6 @@ create_root_env() {
         echo
         read -p "Enter CLIENTID: " CLIENTID
         read -s -p "Enter CLIENTSECRET: " CLIENTSECRET
-        echo
         read -p "Enter UNI5XPOSUREHOST: " UNI5XPOSUREHOST
     # Write to .env file
     cat <<EOF > "$FULLSTACK_DIR/.env"
