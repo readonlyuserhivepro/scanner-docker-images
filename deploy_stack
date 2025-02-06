@@ -8,6 +8,65 @@ HVS_DIR="HVS"
 ASPM_DIR="ASPM"
 FULLSTACK_DIR="."
 
+install_prerequisites()
+{
+    AWS_CLI_VERSION=$(aws --version 2>&1 | cut -d " " -f1 | cut -d "/" -f2)
+    if [ -z "${AWS_CLI_VERSION}" ]; then
+        echo "AWS CLI is not installed. Please Install AWS CLI Before Proceeding"
+        read -p "Do you want to automatically install AWS CLI" aws_install_confirmation
+        if [[ "${aws_install_confirmation}" == "y" ]];
+        then
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip && sudo ./aws/install
+        else
+            echo "HINT: Follow the following steps manually  on terminal to install AWS CLI"
+            echo 'curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip && sudo ./aws/install'
+         exit 1
+    fi
+    GIT_VERSION=$(git --version)
+    if [ -z "${GIT_VERSION} "];
+    then
+    echo "Git is not installed. Please Install Git Before Proceeding"
+    read -p "Do you want to automagically install GIT" git_install_confirmation
+    if [[ "${git_install_confirmation}" == "y" ]];
+    then
+        sudo apt update && sudo apt install -y git
+    else
+        echo "HINT: Follow the following steps manually on terminal to install GIT"
+        echo "sudo apt update && sudo apt install -y git"
+        exit 1
+    fi
+
+    DOCKER_VERSION=$(docker --version)
+    if [ -z "${DOCKER_VERSION} "];
+    then
+        echo "Docker is not installed. Please Install Docker Before Proceeding"
+        read -p "Do you want to automagically install Docker" docker_install_confirmation
+    if [[ "${docker_install_confirmation}" == "y" ]];
+    then
+        sudo apt-get update && \
+        sudo apt-get install ca-certificates curl && \
+        sudo install -m 0755 -d /etc/apt/keyrings && \
+        sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc && \
+        sudo chmod a+r /etc/apt/keyrings/docker.asc && \
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && \
+        sudo apt-get update && \
+        sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+        sudo usermod -aG docker $USER        
+    else
+        echo "HINT: If on a Debian Based Sytem, then follow the following steps manually on terminal to install Docker"
+        echo 'sudo apt-get update && \
+        sudo apt-get install ca-certificates curl && \
+        sudo install -m 0755 -d /etc/apt/keyrings && \
+        sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc && \
+        sudo chmod a+r /etc/apt/keyrings/docker.asc && \
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && \
+        sudo apt-get update && \
+        sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+        sudo usermod -aG docker $USER'
+        exit 1
+    fi
+
+}
 clone_repo()
 {
     if [[ ! -d $HOME/scanner-docker-images ]];
@@ -30,13 +89,7 @@ check_aws_profile() {
 
 configure_docker_aws_cli()
 {
-    AWS_CLI_VERSION=$(aws --version 2>&1 | cut -d " " -f1 | cut -d "/" -f2)
-    if [ -z "${AWS_CLI_VERSION}" ]; then
-        echo "AWS CLI is not installed. Please Install AWS CLI Before Proceeding"
-        echo "HINT: Follow the following steps manually  on terminal to install AWS CLI"
-        echo 'curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip && sudo ./aws/install'
-        exit 1
-    fi
+
     echo "Configuring Docker and AWS CLI Connection"
     # Prompt user for profile name
     profile_name="hivepro"
