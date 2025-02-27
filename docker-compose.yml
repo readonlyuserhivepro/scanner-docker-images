@@ -183,7 +183,7 @@ services:
       - gvmd
 
   outboundagent:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/outboundagent:2.1.0
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/outboundagent:2.2.1
     environment:
       KRONOS_API_URL: "${KRONOS_API_URL}"
       KRONOS_API_KEY: "${KRONOS_API_KEY}"
@@ -293,7 +293,7 @@ services:
 
 # 6 SONARQUBE 
   sonarqube:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/sonarqube:9.9.3-community
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/sonarqube:9.9.5-community
     restart: on-failure
     depends_on:
       sonardb:
