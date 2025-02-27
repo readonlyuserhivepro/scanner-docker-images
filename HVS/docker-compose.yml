@@ -183,7 +183,7 @@ services:
     depends_on:
       - gvmd
   outboundagent:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/outboundagent:2.1.0
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/outboundagent:2.2.1
     environment:
       KRONOS_API_URL: "${UNI5_API_URL}"
       KRONOS_API_KEY: "${UNI5_API_KEY}"
