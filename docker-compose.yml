@@ -5,7 +5,7 @@ services:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/mariadb-configurator:1.0
     restart: on-failure
     profiles:
-      - ASPM
+      - aspm
     volumes:
       - mariadb_pass_vol:/shared
 
@@ -19,7 +19,7 @@ services:
         condition: service_completed_successfully
         restart: true  
     profiles:
-      - ASPM
+      - aspm
     environment:
       APP_VERSION: "5.2.0"
       # MARIADB_ROOT_PASSWORD_FILE: "" ### NOT REQUIRED UNLESS SUPPLYING PASSWORD EXTERNALLY VIA MOUNTED VOLUMES
@@ -44,7 +44,7 @@ services:
     environment:
       DBHOST: "hpmariadb"
     profiles:
-      - ASPM  
+      - aspm  
     depends_on:
       hpmariadb:
         condition: service_healthy
@@ -60,7 +60,7 @@ services:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/mobsf:v3.9.7
     restart: on-failure
     profiles:
-      - ASPM    
+      - aspm    
     depends_on:
       dbconnector:
         condition: service_completed_successfully 
@@ -82,7 +82,7 @@ services:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/zap:2.14.0
     restart: on-failure
     profiles:
-      - ASPM    
+      - aspm    
     depends_on:
       dbconnector:
         condition: service_completed_successfully
@@ -100,7 +100,7 @@ services:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/sonarqube:9.9.5-community
     restart: on-failure
     profiles:
-      - ASPM    
+      - aspm    
     depends_on:
       sonardb:
         condition: service_healthy
@@ -118,7 +118,7 @@ services:
   sonardb:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/postgres:15
     profiles:
-      - ASPM    
+      - aspm    
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 10s
@@ -148,7 +148,7 @@ services:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/genericagent:6.2.3
     restart: on-failure
     profiles:
-      - ASPM    
+      - aspm    
     # user: root
     depends_on:
       zap:
@@ -227,6 +227,8 @@ services:
       - cert_data_vol:/mnt 
   gpg-data:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/gpg-data
+    profiles:
+      - hvs        
     volumes:
       - gpg_data_vol:/mnt                    
   gvmd:
@@ -406,8 +408,8 @@ services:
       - 9081:9081
     environment:
       GVM_CLI_USERNAME: admin
-      UNI5_API_URL: "https://192.168.1.113/"
-      UNI5_API_KEY: "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImlzcyI6ImhpdmVwcm8ta3Jvbm9zLWFwaSIsImlhdCI6MTcyNjAzMzA2MCwibmJmIjoxNzI2MDMzMDYwLCJleHAiOjE3MjYwNDAyNjAsImF1dGhvcml0aWVzIjpbIlJPTEVfU1VQRVJfQURNSU4iXSwidGVuYW50IjoicHVibGljIiwiaXNfbWFzdGVyIjpmYWxzZSwiY3JlYXRlZEF0IjoxNzI2MDMzMDYwNTU2fQ.a4utbXjJc_0PsYvJ81jv8r6KW-8kh9VETXw18WHHuInWoTcl_tPaSFXoC-uTxffcEXnkWw2AW5N0xAj6nwngyg"
+      UNI5_API_URL: "${UNI5_API_URL}"
+      UNI5_API_KEY: "${UNI5_API_KEY}"
       # API_KEY: "CreDridKotJafcicsIsBokGi"     
       PROFILE: "production"
       # SPRING_PROFILES_ACTIVE:"production" // For Setting the ACTIVE PROFILE 
@@ -429,8 +431,8 @@ services:
     profiles:
       - outboundagent    
     environment:
-      KRONOS_API_URL: "https://192.168.1.113/"
-      KRONOS_API_KEY: "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImlzcyI6ImhpdmVwcm8ta3Jvbm9zLWFwaSIsImlhdCI6MTcyNjAzMzA2MCwibmJmIjoxNzI2MDMzMDYwLCJleHAiOjE3MjYwNDAyNjAsImF1dGhvcml0aWVzIjpbIlJPTEVfU1VQRVJfQURNSU4iXSwidGVuYW50IjoicHVibGljIiwiaXNfbWFzdGVyIjpmYWxzZSwiY3JlYXRlZEF0IjoxNzI2MDMzMDYwNTU2fQ.a4utbXjJc_0PsYvJ81jv8r6KW-8kh9VETXw18WHHuInWoTcl_tPaSFXoC-uTxffcEXnkWw2AW5N0xAj6nwngyg"
+      KRONOS_API_URL: "${UNI5_API_URL}"
+      KRONOS_API_KEY: "${UNI5_API_KEY}"
       # SPRING_PROFILES_ACTIVE: ""
     ports:
       - 8081:8081
