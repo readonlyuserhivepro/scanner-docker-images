@@ -262,7 +262,7 @@ services:
   gsa:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/gsa:23.2.1
     profiles:
-      - hvs
+      - gbui
     restart: on-failure
     ports:
       - 9392:80
