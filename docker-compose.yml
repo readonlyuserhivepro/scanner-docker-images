@@ -401,7 +401,7 @@ services:
     depends_on:
       - pg-gvm
   ovasagent:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/ovasagent:2.2.1
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/ovasagent:2.2.0
     profiles:
       - hvs
     ports:
@@ -427,7 +427,7 @@ services:
       gvmd:
         condition: service_started
   outboundagent:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/outboundagent:2.3.1
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/outboundagent:2.3.0
     profiles:
       - outboundagent
     environment:
