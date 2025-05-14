@@ -34,7 +34,18 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
-
+  
+  mariadbupdater:
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/mariadb-updater:6.5.0
+    restart: no
+    profiles:
+      - dbupdate
+    depends_on:
+      hpmariadb:
+        condition: service_healthy
+        # restart: true      
+    volumes:
+      - mariadb_pass_vol:/shared      
 
 # 3. Once DB is Up Check for Configs to SetUp other Tools
 
@@ -145,7 +156,7 @@ services:
      - 8080:8080 #Burp Default Port
 
   genericagent:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/genericagent:6.3.3
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/genericagent:6.4.4
     restart: on-failure
     profiles:
       - aspm
