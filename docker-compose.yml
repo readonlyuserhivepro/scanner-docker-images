@@ -39,7 +39,7 @@ services:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/mariadb-updater:6.5.0
     restart: no
     profiles:
-      - dbupdate
+      - aspm
     depends_on:
       hpmariadb:
         condition: service_healthy
