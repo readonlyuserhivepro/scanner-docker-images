@@ -21,7 +21,7 @@ services:
     profiles:
       - aspm
     environment:
-      APP_VERSION: "6.4.0"
+      APP_VERSION: "6.5.0"
       # MARIADB_ROOT_PASSWORD_FILE: "" ### NOT REQUIRED UNLESS SUPPLYING PASSWORD EXTERNALLY VIA MOUNTED VOLUMES
     volumes:
       - mariadb_data_vol:/var/lib/mysql:Z
@@ -156,7 +156,7 @@ services:
      - 8080:8080 #Burp Default Port
 
   genericagent:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/genericagent:6.4.4
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/genericagent:6.5.0
     restart: on-failure
     profiles:
       - aspm
