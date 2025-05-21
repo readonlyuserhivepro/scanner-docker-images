@@ -128,6 +128,7 @@ services:
       - sonarqube_temp_vol:/opt/sonarqube/temp
   sonardb:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/postgres:15
+    restart: on-failure
     profiles:
       - aspm
     healthcheck:
@@ -413,6 +414,7 @@ services:
       - pg-gvm
   ovasagent:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/ovasagent:2.2.2
+    restart: on-failure
     profiles:
       - hvs
     ports:
@@ -439,6 +441,7 @@ services:
         condition: service_started
   outboundagent:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/outboundagent:2.3.1
+    restart: on-failure
     profiles:
       - outboundagent
     environment:
