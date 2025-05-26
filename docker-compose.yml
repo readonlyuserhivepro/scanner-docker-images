@@ -13,7 +13,7 @@ services:
 
   hpmariadb:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/mariadb:10.4
-    restart: on-failure
+    restart: always
     depends_on:
       mariadb-configurator:
         condition: service_completed_successfully
@@ -69,7 +69,7 @@ services:
 
   mobsf:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/mobsf:v3.9.7
-    restart: on-failure
+    restart: always
     profiles:
       - aspm
     depends_on:
@@ -91,7 +91,7 @@ services:
 
   zap:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/zap:2.14.0
-    restart: on-failure
+    restart: always
     profiles:
       - aspm
     depends_on:
@@ -109,7 +109,7 @@ services:
 # 6 SONARQUBE
   sonarqube:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/sonarqube:9.9.5-community
-    restart: on-failure
+    restart: always
     profiles:
       - aspm
     depends_on:
@@ -128,7 +128,7 @@ services:
       - sonarqube_temp_vol:/opt/sonarqube/temp
   sonardb:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/postgres:15
-    restart: on-failure
+    restart: always
     profiles:
       - aspm
     healthcheck:
@@ -147,6 +147,7 @@ services:
       - postgresql_data_vol:/var/lib/postgresql/data
   burp:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/burp-suite-pro:2023.10.3.7
+    restart: always
     profiles:
       - burp
     ports:
@@ -158,7 +159,7 @@ services:
 
   genericagent:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/genericagent:6.5.0
-    restart: on-failure
+    restart: always
     profiles:
       - aspm
     # user: root
@@ -196,14 +197,14 @@ services:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/redis-server
     profiles:
       - hvs
-    restart: on-failure
+    restart: always
     volumes:
       - redis_socket_vol:/run/redis/
   pg-gvm:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/pg-gvm:22.6.5
     profiles:
       - hvs
-    restart: on-failure
+    restart: always
     volumes:
       - psql_data_vol:/var/lib/postgresql
       - psql_socket_vol:/var/run/postgresql
@@ -247,7 +248,7 @@ services:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/gvmd:23.8.1
     profiles:
       - hvs
-    restart: on-failure
+    restart: always
     volumes:
       - gvmd_data_vol:/var/lib/gvm
       - scap_data_vol:/var/lib/gvm/scap-data/
@@ -275,7 +276,7 @@ services:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/gsa:23.2.1
     profiles:
       - gbui
-    restart: on-failure
+    restart: always
     ports:
       - 9392:80
     volumes:
@@ -287,6 +288,7 @@ services:
   # to reduce likelyhood of unwanted log interferences
   configure-openvas:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/openvas-scanner:23.8.2
+    restart: on-failure
     profiles:
       - hvs
     volumes:
@@ -307,7 +309,7 @@ services:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/openvas-scanner:23.8.2
     profiles:
       - hvs
-    restart: on-failure
+    restart: always
     volumes:
       - openvas_data_vol:/etc/openvas
       - openvas_log_data_vol:/var/log/openvas
@@ -324,7 +326,7 @@ services:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/openvas-scanner:23.8.2
     profiles:
       - hvs
-    restart: on-failure
+    restart: always
     environment:
       # `service_notus` is set to disable everything but notus,
       # if you want to utilize openvasd directly removed `OPENVASD_MODE`
@@ -358,7 +360,7 @@ services:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/ospd-openvas:22.7.1
     profiles:
       - hvs
-    restart: on-failure
+    restart: always
     hostname: ospd-openvas.local
     cap_add:
       - NET_ADMIN # for capturing packages in promiscuous mode
@@ -403,10 +405,10 @@ services:
       - gvmd
       - ospd-openvas
   index-fix:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/index-fix:1.0
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/index-fix:1.1
+    restart: always
     profiles:
       - hvs
-    restart: no
     volumes:
       - psql_socket_vol:/var/run/postgresql
       - psql_data_vol:/var/lib/postgresql
@@ -414,7 +416,7 @@ services:
       - pg-gvm
   ovasagent:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/ovasagent:2.2.0
-    restart: on-failure
+    restart: always
     profiles:
       - hvs
     ports:
@@ -441,7 +443,7 @@ services:
         condition: service_started
   outboundagent:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/outboundagent:2.3.0
-    restart: on-failure
+    restart: always
     profiles:
       - outboundagent
     environment:
