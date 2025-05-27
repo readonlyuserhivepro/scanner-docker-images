@@ -21,7 +21,7 @@ services:
     profiles:
       - aspm
     environment:
-      APP_VERSION: "6.4.0"
+      APP_VERSION: "6.5.0"
       # MARIADB_ROOT_PASSWORD_FILE: "" ### NOT REQUIRED UNLESS SUPPLYING PASSWORD EXTERNALLY VIA MOUNTED VOLUMES
     volumes:
       - mariadb_data_vol:/var/lib/mysql:Z
@@ -35,17 +35,17 @@ services:
       timeout: 5s
       retries: 3
   
-  # mariadbupdater:
-  #   image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/mariadb-updater:6.5.0
-  #   restart: no
-  #   profiles:
-  #     - aspm
-  #   depends_on:
-  #     hpmariadb:
-  #       condition: service_healthy
-  #       # restart: true      
-  #   volumes:
-  #     - mariadb_pass_vol:/shared      
+  mariadbupdater:
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/mariadb-updater:6.5.0
+    restart: no
+    profiles:
+      - aspm
+    depends_on:
+      hpmariadb:
+        condition: service_healthy
+        # restart: true      
+    volumes:
+      - mariadb_pass_vol:/shared      
 
 # 3. Once DB is Up Check for Configs to SetUp other Tools
 
@@ -298,7 +298,7 @@ services:
       - /bin/sh
       - -c
       - |
-        printf "table_driven_lsc = yes\nopenvasd_server = http://openvasd:80\ntest_alive_hosts_only = yes\nmax_vts_timeouts = 5" > /mnt/openvas.conf
+        printf "table_driven_lsc = yes\nopenvasd_server = http://openvasd:80\ntest_alive_hosts_only = yes\nmax_vts_timeouts = 5\n" > /mnt/openvas.conf
         sed "s/127/128/" /etc/openvas/openvas_log.conf | sed 's/gvm/openvas/' > /mnt/openvas_log.conf
         chmod 644 /mnt/openvas.conf
         chmod 644 /mnt/openvas_log.conf
@@ -415,7 +415,7 @@ services:
     depends_on:
       - pg-gvm
   ovasagent:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/ovasagent:2.2.0
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/ovasagent:2.2.2
     restart: always
     profiles:
       - hvs
@@ -442,7 +442,7 @@ services:
       gvmd:
         condition: service_started
   outboundagent:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/outboundagent:2.3.0
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/outboundagent:2.3.1
     restart: always
     profiles:
       - outboundagent
