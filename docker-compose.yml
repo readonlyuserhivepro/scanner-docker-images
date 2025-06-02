@@ -200,9 +200,10 @@ services:
     restart: always
     deploy:
       resources:
-        memory:
-          limits: 500M
-          reservations: 200M    
+        limits:
+          memory: 500M
+        reservations: 
+          memory: 200M  
     volumes:
       - redis_socket_vol:/run/redis/
   pg-gvm:
@@ -212,9 +213,10 @@ services:
     restart: always
     deploy:
       resources:
-        memory:
-          limits: 1g
-          reservations: 200M    
+        limits:
+          memory: 1g
+        reservations: 
+          memory: 200M  
     volumes:
       - psql_data_vol:/var/lib/postgresql
       - psql_socket_vol:/var/run/postgresql
@@ -261,9 +263,10 @@ services:
     restart: always
     deploy:
       resources:
-        memory:
-          limits: 500M
-          reservations: 200M    
+        limits:
+          memory: 500M
+        reservations: 
+          memory: 200M   
     volumes:
       - gvmd_data_vol:/var/lib/gvm
       - scap_data_vol:/var/lib/gvm/scap-data/
@@ -291,9 +294,10 @@ services:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/gsa:23.2.1
     deploy:
       resources:
-        memory:
-          limits: 500M
-          reservations: 200M    
+        limits:
+          memory: 500M
+        reservations: 
+          memory: 200M   
     profiles:
       - gbui
     restart: always
@@ -311,9 +315,10 @@ services:
     restart: on-failure
     deploy:
       resources:
-        memory:
-          limits: 500M
-          reservations: 200M    
+        limits:
+          memory: 500M
+        reservations: 
+          memory: 200M 
     profiles:
       - hvs
     volumes:
@@ -337,9 +342,10 @@ services:
     restart: always
     deploy:
       resources:
-        memory:
-          limits: 500M
-          reservations: 200M    
+        limits:
+          memory: 500M
+        reservations: 
+          memory: 200M
     volumes:
       - openvas_data_vol:/etc/openvas
       - openvas_log_data_vol:/var/log/openvas
@@ -359,9 +365,10 @@ services:
     restart: always
     deploy:
       resources:
-        memory:
-          limits: 500M
-          reservations: 200M    
+        limits:
+          memory: 500M
+        reservations: 
+          memory: 200M 
     environment:
       # `service_notus` is set to disable everything but notus,
       # if you want to utilize openvasd directly removed `OPENVASD_MODE`
@@ -398,9 +405,10 @@ services:
     restart: always
     deploy:
       resources:
-        memory:
-          limits: 500M
-          reservations: 200M    
+        limits:
+          memory: 500M
+        reservations: 
+          memory: 200M  
     hostname: ospd-openvas.local
     cap_add:
       - NET_ADMIN # for capturing packages in promiscuous mode
@@ -449,9 +457,10 @@ services:
     restart: always
     deploy:
       resources:
-        memory:
-          limits: 200M
-          reservations: 200M    
+        limits:
+          memory: 200M
+        reservations: 
+          memory: 100M
     profiles:
       - hvs
     volumes:
@@ -464,9 +473,10 @@ services:
     restart: always
     deploy:
       resources:
-        memory:
-          limits: 500M
-          reservations: 200M    
+        limits:
+          memory: 500M
+        reservations: 
+          memory: 200M 
     profiles:
       - hvs
     ports:
@@ -496,9 +506,10 @@ services:
     restart: always
     deploy:
       resources:
-        memory:
-          limits: 500M
-          reservations: 200M
+        limits:
+          memory: 500M
+        reservations: 
+          memory: 200M
             
     profiles:
       - outboundagent
