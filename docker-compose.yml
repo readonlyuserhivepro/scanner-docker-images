@@ -198,9 +198,7 @@ services:
     profiles:
       - hvs
     restart: always
-    mem_limit: 500m
-    mem_reservation: 200m
-    memswap_limit: -1 
+
     volumes:
       - redis_socket_vol:/run/redis/
   pg-gvm:
@@ -208,9 +206,7 @@ services:
     profiles:
       - hvs
     restart: always
-    mem_limit: 1g
-    mem_reservation: 200m
-    memswap_limit: -1  
+ 
     volumes:
       - psql_data_vol:/var/lib/postgresql
       - psql_socket_vol:/var/run/postgresql
@@ -255,9 +251,7 @@ services:
     profiles:
       - hvs
     restart: always
-    mem_limit: 300m
-    mem_reservation: 200m
-    memswap_limit: -1  
+ 
     volumes:
       - gvmd_data_vol:/var/lib/gvm
       - scap_data_vol:/var/lib/gvm/scap-data/
@@ -283,9 +277,7 @@ services:
         condition: service_completed_successfully
   gsa:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/gsa:23.2.1
-    mem_limit: 500m
-    mem_reservation: 200m
-    memswap_limit: -1  
+
     profiles:
       - gbui
     restart: always
@@ -301,9 +293,7 @@ services:
   configure-openvas:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/openvas-scanner:23.8.2
     restart: on-failure
-    mem_limit: 500m
-    mem_reservation: 200m
-    memswap_limit: -1
+
     profiles:
       - hvs
     volumes:
@@ -325,9 +315,7 @@ services:
     profiles:
       - hvs
     restart: always
-    mem_limit: 500m
-    mem_reservation: 200m
-    memswap_limit: -1
+
     volumes:
       - openvas_data_vol:/etc/openvas
       - openvas_log_data_vol:/var/log/openvas
@@ -345,9 +333,7 @@ services:
     profiles:
       - hvs
     restart: always    
-    mem_limit: 500m
-    mem_reservation: 200m
-    memswap_limit: -1 
+
     environment:
       # `service_notus` is set to disable everything but notus,
       # if you want to utilize openvasd directly removed `OPENVASD_MODE`
@@ -382,9 +368,7 @@ services:
     profiles:
       - hvs
     restart: always    
-    mem_limit: 500m
-    mem_reservation: 200m
-    memswap_limit: -1
+
     hostname: ospd-openvas.local
     cap_add:
       - NET_ADMIN # for capturing packages in promiscuous mode
@@ -431,9 +415,7 @@ services:
   index-fix:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/index-fix:1.1
     restart: always
-    mem_limit: 200m
-    mem_reservation: 100m
-    memswap_limit: -1
+
     profiles:
       - hvs
     volumes:
@@ -444,9 +426,7 @@ services:
   ovasagent:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/ovasagent:2.2.3-dev
     restart: always
-    mem_limit: 500m
-    mem_reservation: 200m
-    memswap_limit: -1
+
     profiles:
       - hvs
     ports:
@@ -474,9 +454,7 @@ services:
   outboundagent:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/outboundagent:2.3.1
     restart: always
-    mem_limit: 500m
-    mem_reservation: 200m
-    memswap_limit: -1
+
             
     profiles:
       - outboundagent
