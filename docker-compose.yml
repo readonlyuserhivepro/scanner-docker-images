@@ -448,6 +448,7 @@ services:
       - gvmd_socket_vol:/run/gvmd:z
       - ospd_openvas_socket_vol:/run/ospd:z
       - shared-data:/shared:z
+      - ovasagent_vol:/data/kronos/ovasagent/data/
     depends_on:
       gvmd:
         condition: service_started
@@ -493,3 +494,4 @@ volumes:
   sonarqube_logs_vol:
   sonarqube_temp_vol:
   zap_config_vol:
+  ovasagent_vol:
