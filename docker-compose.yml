@@ -415,7 +415,7 @@ services:
     depends_on:
       - pg-gvm
   ovasagent:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/ovasagent:2.2.3
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/ovasagent:2.2.4
     restart: always
     profiles:
       - hvs
@@ -438,6 +438,7 @@ services:
       - gvmd_socket_vol:/run/gvmd:z
       - ospd_openvas_socket_vol:/run/ospd:z
       - shared-data:/shared:z
+      - ovasagent_vol:/data/kronos/ovasagent/data:z
     depends_on:
       gvmd:
         condition: service_started
@@ -481,3 +482,4 @@ volumes:
   sonarqube_logs_vol:
   sonarqube_temp_vol:
   zap_config_vol:
+  ovasagent_vol:
