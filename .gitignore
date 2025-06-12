@@ -1,0 +1,3 @@
+$HOME/scanner-docker-images/HVS/*.env
+$HOME/scanner-docker-images/ASPM/*.env
+$HOME/scanner-docker-image/*.env
