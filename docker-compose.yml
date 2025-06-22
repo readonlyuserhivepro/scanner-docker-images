@@ -1,6 +1,5 @@
 services:
-# 1. Initialise DB with Random Pass
-
+  # 1. Initialise DB with Random Pass
   mariadb-configurator:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/mariadb-configurator:1.0
     restart: on-failure
@@ -8,9 +7,7 @@ services:
       - aspm
     volumes:
       - mariadb_pass_vol:/shared
-
-# 2. Actual MariaDB
-
+      # 2. Actual MariaDB
   hpmariadb:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/mariadb:10.4
     restart: always
@@ -34,7 +31,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
-  
   mariadbupdater:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/mariadb-updater:6.5.0
     restart: no
@@ -45,10 +41,8 @@ services:
         condition: service_healthy
         # restart: true      
     volumes:
-      - mariadb_pass_vol:/shared      
-
-# 3. Once DB is Up Check for Configs to SetUp other Tools
-
+      - mariadb_pass_vol:/shared
+      # 3. Once DB is Up Check for Configs to SetUp other Tools
   dbconnector:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/dbconnector:1.0
     restart: no
@@ -64,9 +58,7 @@ services:
       - mariadb_pass_vol:/shared
       - mobsf_config_vol:/mobsf
       - zap_config_vol:/zap
-
-# 4. Once DBConnector Creates Necessary Startup Files Start Mobsf
-
+      # 4. Once DBConnector Creates Necessary Startup Files Start Mobsf
   mobsf:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/mobsf:v3.9.7
     restart: always
@@ -85,10 +77,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-
-
-# 5. Once DBConnector Creates Necessary Startup Files Start ZAP
-
+      # 5. Once DBConnector Creates Necessary Startup Files Start ZAP
   zap:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/zap:2.14.0
     restart: always
@@ -105,8 +94,8 @@ services:
       - zap_config_vol:/shared
     # ports:
     #   - 8812:8812
+  # 6 SONARQUBE
 
-# 6 SONARQUBE
   sonarqube:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/sonarqube:9.9.5-community
     restart: always
@@ -151,12 +140,11 @@ services:
     profiles:
       - burp
     ports:
-     - 9991:9991 # Burp API
-     - 5900:5900 #VNC Client
-     - 6080:6080 #Web VNC Client
-     - 1337:1337
-     - 8080:8080 #Burp Default Port
-
+      - 9991:9991 # Burp API
+      - 5900:5900 #VNC Client
+      - 6080:6080 #Web VNC Client
+      - 1337:1337
+      - 8080:8080 #Burp Default Port
   genericagent:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/genericagent:6.5.0
     restart: always
@@ -190,15 +178,12 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - 9096:9096
-
-
-#7 HVS
+      #7 HVS
   redis-server:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/redis-server
     profiles:
       - hvs
     restart: always
-
     volumes:
       - redis_socket_vol:/run/redis/
   pg-gvm:
@@ -206,7 +191,6 @@ services:
     profiles:
       - hvs
     restart: always
- 
     volumes:
       - psql_data_vol:/var/lib/postgresql
       - psql_socket_vol:/var/run/postgresql
@@ -251,7 +235,6 @@ services:
     profiles:
       - hvs
     restart: always
- 
     volumes:
       - gvmd_data_vol:/var/lib/gvm
       - scap_data_vol:/var/lib/gvm/scap-data/
@@ -277,7 +260,6 @@ services:
         condition: service_completed_successfully
   gsa:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/gsa:23.2.1
-
     profiles:
       - gbui
     restart: always
@@ -293,7 +275,6 @@ services:
   configure-openvas:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/openvas-scanner:23.8.2
     restart: on-failure
-
     profiles:
       - hvs
     volumes:
@@ -315,7 +296,6 @@ services:
     profiles:
       - hvs
     restart: always
-
     volumes:
       - openvas_data_vol:/etc/openvas
       - openvas_log_data_vol:/var/log/openvas
@@ -332,8 +312,7 @@ services:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/openvas-scanner:23.8.2
     profiles:
       - hvs
-    restart: always    
-
+    restart: always
     environment:
       # `service_notus` is set to disable everything but notus,
       # if you want to utilize openvasd directly removed `OPENVASD_MODE`
@@ -367,8 +346,7 @@ services:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/ospd-openvas:22.7.1
     profiles:
       - hvs
-    restart: always    
-
+    restart: always
     hostname: ospd-openvas.local
     cap_add:
       - NET_ADMIN # for capturing packages in promiscuous mode
@@ -376,17 +354,7 @@ services:
     security_opt:
       - seccomp=unconfined
       - apparmor=unconfined
-    command:
-      [
-        "ospd-openvas",
-        "-f",
-        "--config",
-        "/etc/gvm/ospd-openvas.conf",
-        "--notus-feed-dir",
-        "/var/lib/notus/advisories",
-        "-m",
-        "666"
-      ]
+    command: ["ospd-openvas", "-f", "--config", "/etc/gvm/ospd-openvas.conf", "--notus-feed-dir", "/var/lib/notus/advisories", "-m", "666"]
     volumes:
       - gpg_data_vol:/etc/openvas/gnupg
       - vt_data_vol:/var/lib/openvas/plugins
@@ -415,7 +383,6 @@ services:
   index-fix:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/index-fix:1.1
     restart: always
-
     profiles:
       - hvs
     volumes:
@@ -426,7 +393,6 @@ services:
   ovasagent:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/ovasagent:2.2.4-dev
     restart: always
-
     profiles:
       - hvs
     ports:
@@ -453,10 +419,8 @@ services:
       gvmd:
         condition: service_started
   outboundagent:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/outboundagent:2.3.1
+    image: 767398110122.dkr.ecr.us-east-1.amazonaws.com/outboundagent:1.0.9562-dev-9a13c0a4-9a13c0a40ac2e53fbff1e91df89796aaf20b46dc
     restart: always
-
-            
     profiles:
       - outboundagent
     environment:
@@ -467,7 +431,6 @@ services:
     ports:
       - 8081:8081
       - 8083:8083
-
 volumes:
   gpg_data_vol:
   scap_data_vol:
