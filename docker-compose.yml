@@ -92,8 +92,8 @@ services:
       JMEM: "-XX:MaxRAMPercentage=50.0 -XshowSettings:vm"
     volumes:
       - zap_config_vol:/shared
-    # ports:
-    #   - 8812:8812
+      # ports:
+      #   - 8812:8812
   # 6 SONARQUBE
 
   sonarqube:
@@ -419,7 +419,7 @@ services:
       gvmd:
         condition: service_started
   outboundagent:
-    image: 767398110122.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/outboundagent:1.0.9764-staging-51494b7a-51494b7a002ac109a86dcf9b706941f0a9b8a7c4
+    image: 767398110122.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/outboundagent:1.0.9769-staging-51494b7a-51494b7a002ac109a86dcf9b706941f0a9b8a7c4
     restart: always
     profiles:
       - outboundagent
