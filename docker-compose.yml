@@ -423,6 +423,8 @@ services:
     restart: always
     profiles:
       - outboundagent
+    volumes:
+      - shared-data:/shared:z
     environment:
       KRONOS_API_URL: "${UNI5_API_URL}"
       KRONOS_API_KEY: "${UNI5_API_KEY}"
