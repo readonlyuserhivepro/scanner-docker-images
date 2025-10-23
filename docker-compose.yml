@@ -427,7 +427,7 @@ services:
       UNI5_API_KEY: "${UNI5_API_KEY}"
       # API_KEY: "CreDridKotJafcicsIsBokGi"
       PROFILE: "production"
-      VM_IP: "{VM_IP}"
+      VM_IP: "${VM_IP}"
       # SPRING_PROFILES_ACTIVE:"production" // For Setting the ACTIVE PROFILE
     volumes:
       - vt_data_vol:/var/lib/openvas/plugins:z
@@ -454,7 +454,7 @@ services:
       KRONOS_API_URL: "${UNI5_API_URL}"
       KRONOS_API_KEY: "${UNI5_API_KEY}"
       JAVA_OPTS: "-Doptions.package-manager.enabled=false -Dserver.address=127.0.0.1"
-      VM_IP: "{VM_IP}"
+      VM_IP: "${VM_IP}"
       # SPRING_PROFILES_ACTIVE: ""
     ports:
       - 8081:8081
