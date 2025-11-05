@@ -391,7 +391,7 @@ services:
     depends_on:
       - pg-gvm
   ovasagent:
-    image: 767398110122.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/ovasagent:1.0.365-staging-4d83729d-4d83729d6676099e5d8d46486303f6e5ceca6823
+    image: 767398110122.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/ovasagent:1.0.367-staging-92965932-92965932570b04f9d7664166e91d5774cde7f11b
     restart: always
     profiles:
       - hvs
