@@ -34,7 +34,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
-  
+
   mariadbupdater:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/mariadb-updater:6.5.0
     restart: no
@@ -43,9 +43,9 @@ services:
     depends_on:
       hpmariadb:
         condition: service_healthy
-        # restart: true      
+        # restart: true
     volumes:
-      - mariadb_pass_vol:/shared      
+      - mariadb_pass_vol:/shared
 
 # 3. Once DB is Up Check for Configs to SetUp other Tools
 
@@ -201,7 +201,7 @@ services:
     volumes:
       - redis_socket_vol:/run/redis/
   pg-gvm:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/pg-gvm:22.6.11
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/pg-gvm:22.6.10
     profiles:
       - hvs
     restart: always
@@ -253,7 +253,11 @@ services:
       - gvmd_data_vol:/var/lib/gvm
       - scap_data_vol:/var/lib/gvm/scap-data/
       - cert_data_vol:/var/lib/gvm/cert-data
-      - data_objects_vol:/var/lib/gvm/data-objects/gvmd
+      - type: volume
+        source: data_objects_vol
+        target: /var/lib/gvm/data-objects/gvmd
+        volume:
+          subpath: "22.04"
       - vt_data_vol:/var/lib/openvas/plugins
       - notus_data_vol:/var/lib/notus
       - psql_data_vol:/var/lib/postgresql
@@ -435,7 +439,11 @@ services:
       - gvmd_data_vol:/var/lib/gvm:z
       - scap_data_vol:/var/lib/gvm/scap-data:z
       - cert_data_vol:/var/lib/gvm/cert-data:z
-      - data_objects_vol:/var/lib/gvm/data-objects/gvmd:z
+      - type: volume
+        source: data_objects_vol
+        target: /var/lib/gvm/data-objects/gvmd
+        volume:
+          subpath: "22.04"
       - gvmd_socket_vol:/run/gvmd:z
       - ospd_openvas_socket_vol:/run/ospd:z
       - shared-data:/shared:z
