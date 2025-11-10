@@ -253,7 +253,7 @@ services:
       - gvmd_data_vol:/var/lib/gvm
       - scap_data_vol:/var/lib/gvm/scap-data/
       - cert_data_vol:/var/lib/gvm/cert-data
-      - data_objects_vol:/var/lib/gvm/data-objects/gvmd
+      - data_objects_vol/22.04:/var/lib/gvm/data-objects/gvmd
       - vt_data_vol:/var/lib/openvas/plugins
       - notus_data_vol:/var/lib/notus
       - psql_data_vol:/var/lib/postgresql
@@ -435,7 +435,7 @@ services:
       - gvmd_data_vol:/var/lib/gvm:z
       - scap_data_vol:/var/lib/gvm/scap-data:z
       - cert_data_vol:/var/lib/gvm/cert-data:z
-      - data_objects_vol:/var/lib/gvm/data-objects/gvmd:z
+      - data_objects_vol/22.04:/var/lib/gvm/data-objects/gvmd:z
       - gvmd_socket_vol:/run/gvmd:z
       - ospd_openvas_socket_vol:/run/ospd:z
       - shared-data:/shared:z
