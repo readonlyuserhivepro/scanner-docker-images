@@ -420,7 +420,7 @@ services:
       gvmd:
         condition: service_started
   outboundagent:
-    image: 767398110122.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/outboundagent:1.0.10948-dev-01fe606b-01fe606b1dcda91d9ecd68e3c5c038bbe0bf4421
+    image: 767398110122.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/outboundagent:1.0.10951-dev-01fe606b-01fe606b1dcda91d9ecd68e3c5c038bbe0bf4421
     restart: always
     profiles:
       - outboundagent
