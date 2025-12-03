@@ -34,7 +34,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
-  
+
   mariadbupdater:
     image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/mariadb-updater:6.5.0
     restart: no
@@ -43,9 +43,9 @@ services:
     depends_on:
       hpmariadb:
         condition: service_healthy
-        # restart: true      
+        # restart: true
     volumes:
-      - mariadb_pass_vol:/shared      
+      - mariadb_pass_vol:/shared
 
 # 3. Once DB is Up Check for Configs to SetUp other Tools
 
@@ -194,14 +194,14 @@ services:
 
 #7 HVS
   redis-server:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/redis-server
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/redis-server:24
     profiles:
       - hvs
     restart: always
     volumes:
       - redis_socket_vol:/run/redis/
   pg-gvm:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/pg-gvm:22.6.5
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/pg-gvm:22.6.10
     profiles:
       - hvs
     restart: always
@@ -245,7 +245,7 @@ services:
     volumes:
       - gpg_data_vol:/mnt
   gvmd:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/gvmd:23.8.1
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/gvmd:26.6.0
     profiles:
       - hvs
     restart: always
@@ -253,7 +253,11 @@ services:
       - gvmd_data_vol:/var/lib/gvm
       - scap_data_vol:/var/lib/gvm/scap-data/
       - cert_data_vol:/var/lib/gvm/cert-data
-      - data_objects_vol:/var/lib/gvm/data-objects/gvmd
+      - type: volume
+        source: data_objects_vol
+        target: /var/lib/gvm/data-objects/gvmd
+        volume:
+          subpath: "22.04"
       - vt_data_vol:/var/lib/openvas/plugins
       - notus_data_vol:/var/lib/notus
       - psql_data_vol:/var/lib/postgresql
@@ -273,7 +277,7 @@ services:
       vulnerability-tests:
         condition: service_completed_successfully
   gsa:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/gsa:23.2.1
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/gsa:26.2.0
     profiles:
       - gbui
     restart: always
@@ -287,13 +291,13 @@ services:
   # and changes log output to /var/log/openvas instead /var/log/gvm
   # to reduce likelyhood of unwanted log interferences
   configure-openvas:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/openvas-scanner:23.8.2
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/openvas-scanner:23.30.1
     restart: on-failure
     profiles:
       - hvs
     volumes:
       - openvas_data_vol:/mnt
-      - openvas_log_data_vol:/var/log/openvas
+
     command:
       - /bin/sh
       - -c
@@ -306,13 +310,13 @@ services:
         chmod 666 /var/log/openvas/openvas.log
   # shows logs of openvas
   openvas:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/openvas-scanner:23.8.2
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/openvas-scanner:23.30.1
     profiles:
       - hvs
     restart: always
     volumes:
       - openvas_data_vol:/etc/openvas
-      - openvas_log_data_vol:/var/log/openvas
+
     command:
       - /bin/sh
       - -c
@@ -323,7 +327,7 @@ services:
       configure-openvas:
         condition: service_completed_successfully
   openvasd:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/openvas-scanner:23.8.2
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/openvas-scanner:23.30.1
     profiles:
       - hvs
     restart: always
@@ -340,7 +344,6 @@ services:
         /usr/local/bin/openvasd  --ospd-socket /run/ospd/ospd-openvas.sock
     volumes:
       - openvas_data_vol:/etc/openvas
-      - openvas_log_data_vol:/var/log/openvas
       - notus_data_vol:/var/lib/notus
       - ospd_openvas_socket_vol:/run/ospd
       - gpg_data_vol:/etc/openvas/gnupg
@@ -357,7 +360,7 @@ services:
         aliases:
           - openvasd
   ospd-openvas:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/ospd-openvas:22.7.1
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/ospd-openvas:22.9.0
     profiles:
       - hvs
     restart: always
@@ -386,7 +389,6 @@ services:
       - ospd_openvas_socket_vol:/run/ospd
       - redis_socket_vol:/run/redis/
       - openvas_data_vol:/etc/openvas/
-      - openvas_log_data_vol:/var/log/openvas
     depends_on:
       redis-server:
         condition: service_started
@@ -474,7 +476,6 @@ volumes:
   ospd_openvas_socket_vol:
   redis_socket_vol:
   openvas_data_vol:
-  openvas_log_data_vol:
   shared-data:
   mariadb_data_vol:
   mariadb_pass_vol:
