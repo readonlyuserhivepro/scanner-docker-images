@@ -297,6 +297,7 @@ services:
       - hvs
     volumes:
       - openvas_data_vol:/mnt
+      - openvas_log_data_vol:/var/log/openvas
 
     command:
       - /bin/sh
@@ -316,6 +317,7 @@ services:
     restart: always
     volumes:
       - openvas_data_vol:/etc/openvas
+      - openvas_log_data_vol:/var/log/openvas
 
     command:
       - /bin/sh
@@ -344,6 +346,7 @@ services:
         /usr/local/bin/openvasd  --ospd-socket /run/ospd/ospd-openvas.sock
     volumes:
       - openvas_data_vol:/etc/openvas
+      - openvas_log_data_vol:/var/log/openvas
       - notus_data_vol:/var/lib/notus
       - ospd_openvas_socket_vol:/run/ospd
       - gpg_data_vol:/etc/openvas/gnupg
@@ -389,6 +392,7 @@ services:
       - ospd_openvas_socket_vol:/run/ospd
       - redis_socket_vol:/run/redis/
       - openvas_data_vol:/etc/openvas/
+      - openvas_log_data_vol:/var/log/openvas
     depends_on:
       redis-server:
         condition: service_started
@@ -476,6 +480,7 @@ volumes:
   ospd_openvas_socket_vol:
   redis_socket_vol:
   openvas_data_vol:
+  openvas_log_data_vol:
   shared-data:
   mariadb_data_vol:
   mariadb_pass_vol:
