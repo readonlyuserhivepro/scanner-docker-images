@@ -441,7 +441,11 @@ services:
       - gvmd_data_vol:/var/lib/gvm:z
       - scap_data_vol:/var/lib/gvm/scap-data:z
       - cert_data_vol:/var/lib/gvm/cert-data:z
-      - data_objects_vol:/var/lib/gvm/data-objects/gvmd:z
+      - type: volume
+        source: data_objects_vol
+        target: /var/lib/gvm/data-objects/gvmd
+        volume:
+          subpath: "22.04"
       - gvmd_socket_vol:/run/gvmd:z
       - ospd_openvas_socket_vol:/run/ospd:z
       - shared-data:/shared:z
