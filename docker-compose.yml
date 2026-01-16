@@ -9,8 +9,8 @@ services:
     environment:
       CLIENTID: "${CLIENTID}"
       CLIENTSECRET: "${CLIENTSECRET}"
-      UNI5XPOSUREHOST: "${UNI5XPOSUREHOST}"    
-    # 1. Initialise DB with Random Pass
+      UNI5XPOSUREHOST: "${UNI5XPOSUREHOST}"
+      # 1. Initialise DB with Random Pass
   mariadb-configurator:
     image: 767398110122.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/mariadb-configurator:1.0
     restart: on-failure
@@ -439,7 +439,7 @@ services:
       gvmd:
         condition: service_started
   outboundagent:
-    image: 767398110122.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/outboundagent:1.0.11464-dev-933491a6-933491a658e20554ab2cd86582fa7b71df705d30
+    image: 767398110122.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/outboundagent:1.0.11479-dev-6d4eafb9-6d4eafb9f1a81e512b492664fe8c2ad4b8b9f629
     restart: always
     profiles:
       - outboundagent
