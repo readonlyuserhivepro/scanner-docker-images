@@ -1,4 +1,14 @@
 services:
+  external-agent: 767398110122.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/external-agent:1.0
+  restart: on-failure
+  profiles:
+    - externalagent
+  ports:
+    - 1096:9096
+  environment:
+    CLIENTID: "${CLIENTID}"
+    CLIENTSECRET: "${CLIENTSECRET}"
+    UNI5XPOSUREHOST: "${UNI5XPOSUREHOST}"    
   # 1. Initialise DB with Random Pass
   mariadb-configurator:
     image: 767398110122.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/mariadb-configurator:1.0
