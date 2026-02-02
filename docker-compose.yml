@@ -71,7 +71,7 @@ services:
       - zap_config_vol:/zap
       # 4. Once DBConnector Creates Necessary Startup Files Start Mobsf
   mobsf:
-    image: 767398110122.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/mobsf:v3.9.7
+    image: 767398110122.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/mobsf:v4.4.2
     restart: always
     profiles:
       - aspm
@@ -90,7 +90,7 @@ services:
       retries: 5
       # 5. Once DBConnector Creates Necessary Startup Files Start ZAP
   zap:
-    image: 767398110122.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/zap:2.14.0
+    image: 767398110122.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/zap:2.17.0
     restart: always
     profiles:
       - aspm
