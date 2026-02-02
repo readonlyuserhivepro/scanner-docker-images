@@ -295,6 +295,7 @@ services:
     volumes:
       - openvas_data_vol:/mnt
       - openvas_log_data_vol:/var/log/openvas
+
     command:
       - /bin/sh
       - -c
@@ -314,6 +315,7 @@ services:
     volumes:
       - openvas_data_vol:/etc/openvas
       - openvas_log_data_vol:/var/log/openvas
+
     command:
       - /bin/sh
       - -c
@@ -449,6 +451,7 @@ services:
       KRONOS_API_URL: "${UNI5_API_URL}"
       KRONOS_API_KEY: "${UNI5_API_KEY}"
       JAVA_OPTS: "-Doptions.package-manager.enabled=false -Dserver.address=127.0.0.1"
+      HOST_IP: "${HOST_IP}"
       # SPRING_PROFILES_ACTIVE: ""
       HOST_IP: "${HOST_IP}"
     ports:
