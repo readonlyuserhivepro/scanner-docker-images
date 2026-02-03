@@ -453,7 +453,6 @@ services:
       JAVA_OPTS: "-Doptions.package-manager.enabled=false -Dserver.address=127.0.0.1"
       HOST_IP: "${HOST_IP}"
       # SPRING_PROFILES_ACTIVE: ""
-      HOST_IP: "${HOST_IP}"
     ports:
       - 8081:8081
       - 8083:8083
