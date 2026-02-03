@@ -449,8 +449,8 @@ services:
       KRONOS_API_URL: "${UNI5_API_URL}"
       KRONOS_API_KEY: "${UNI5_API_KEY}"
       JAVA_OPTS: "-Doptions.package-manager.enabled=false -Dserver.address=127.0.0.1"
-      # SPRING_PROFILES_ACTIVE: ""
       HOST_IP: "${HOST_IP}"
+      # SPRING_PROFILES_ACTIVE: ""
     ports:
       - 8081:8081
       - 8083:8083
