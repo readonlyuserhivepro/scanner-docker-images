@@ -55,7 +55,7 @@ services:
       - mariadb_pass_vol:/shared
       # 3. Once DB is Up Check for Configs to SetUp other Tools
   dbconnector:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/dbconnector:1.0
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/dbconnector:1.1
     restart: no
     environment:
       DBHOST: "hpmariadb"
@@ -108,7 +108,7 @@ services:
   # 6 SONARQUBE
 
   sonarqube:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/sonarqube:9.9.5-community
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/sonarqube:25.8.0.112029-community
     restart: always
     profiles:
       - aspm
