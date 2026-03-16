@@ -156,6 +156,9 @@ services:
       - 6080:6080 #Web VNC Client
       - 1337:1337
       - 8080:8080 #Burp Default Port
+    volumes:
+      - BURP_DATA:/root/.BurpSuite
+      - BURP_USERPREFS:/root/.java/.userPrefs
   genericagent:
     image: ecr-dev-staging.hivepro.com/containerized-scanner-bundles/genericagent:2.0.5-4c5dcfb
     restart: always
