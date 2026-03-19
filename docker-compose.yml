@@ -458,6 +458,8 @@ services:
       - 8081:8081
       - 8083:8083
 volumes:
+  BURP_DATA:
+  BURP_USERPREFS:
   gpg_data_vol:
   scap_data_vol:
   cert_data_vol:
