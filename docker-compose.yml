@@ -442,7 +442,7 @@ services:
       gvmd:
         condition: service_started
   outboundagent:
-    image: ecr-dev-staging.hivepro.com/containerized-scanner-bundles/outboundagent:1.0.11997-staging-f84468d2-f84468d2d58a2db347622a457f2520d01176ceb7
+    image: ecr-dev-staging.hivepro.com/containerized-scanner-bundles/outboundagent:1.0.12171-staging-c6c39bec-c6c39bec93ad612afb2072e2c02824e49953e5e9
     restart: always
     profiles:
       - outboundagent
