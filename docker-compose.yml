@@ -160,7 +160,7 @@ services:
       - BURP_DATA:/root/.BurpSuite
       - BURP_USERPREFS:/root/.java/.userPrefs
   genericagent:
-    image: ecr-dev-staging.hivepro.com/containerized-scanner-bundles/genericagent:2.0.5-4c5dcfb
+    image: 767398110122.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/genericagent:2.0.5-567d489
     restart: always
     profiles:
       - aspm
