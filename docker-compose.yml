@@ -439,7 +439,7 @@ services:
       gvmd:
         condition: service_started
   outboundagent:
-    image: 767398110122.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/outboundagent:1.0.12356-dev-37fe295c-37fe295c6fca811085c7f2ddaaa05ad89690649b
+    image: 767398110122.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/outboundagent:1.0.12360-dev-25c5e5be-25c5e5be372fb603c2e325c645819e3ae211132b
     restart: always
     profiles:
       - outboundagent
