@@ -409,7 +409,7 @@ services:
     depends_on:
       - pg-gvm
   ovasagent:
-    image: ecr-dev-staging.hivepro.com/containerized-scanner-bundles/ovasagent:1.0.369-staging-ff4edeed-ff4edeed7924bf0a6a545c996deee15e1adbb89c
+    image: ecr-dev-staging.hivepro.com/containerized-scanner-bundles/ovasagent:1.0.379-staging-b516ffa4
     restart: always
     profiles:
       - hvs
