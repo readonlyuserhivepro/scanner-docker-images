@@ -157,7 +157,7 @@ services:
       - 1337:1337
       - 8080:8080 #Burp Default Port
   genericagent:
-    image: "767398110122.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/genericagent:2.0.6-0d10e89"
+    image: "767398110122.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/genericagent:2.0.5-567d489"
     restart: always
     profiles:
       - aspm
