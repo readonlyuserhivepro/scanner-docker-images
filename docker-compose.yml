@@ -156,11 +156,8 @@ services:
       - 6080:6080 #Web VNC Client
       - 1337:1337
       - 8080:8080 #Burp Default Port
-    volumes:
-      - BURP_DATA:/root/.BurpSuite
-      - BURP_USERPREFS:/root/.java/.userPrefs
   genericagent:
-    image: ${REGISTRY:-098915869641.dkr.ecr.us-east-1.amazonaws.com}/containerized-scanner-bundles/genericagent:2.0.5-4c5dcfb
+    image: ${REGISTRY:-098915869641.dkr.ecr.us-east-1.amazonaws.com}/containerized-scanner-bundles/genericagent:2.0.5
     restart: always
     profiles:
       - aspm
@@ -298,6 +295,7 @@ services:
     volumes:
       - openvas_data_vol:/mnt
       - openvas_log_data_vol:/var/log/openvas
+
     command:
       - /bin/sh
       - -c
@@ -317,6 +315,7 @@ services:
     volumes:
       - openvas_data_vol:/etc/openvas
       - openvas_log_data_vol:/var/log/openvas
+
     command:
       - /bin/sh
       - -c
@@ -327,7 +326,7 @@ services:
       configure-openvas:
         condition: service_completed_successfully
   openvasd:
-    image: ${REGISTRY:-098915869641.dkr.ecr.us-east-1.amazonaws.com}/containerized-scanner-bundles/openvas-scanner:23.8.2
+    image: ${REGISTRY:-098915869641.dkr.ecr.us-east-1.amazonaws.com}/containerized-scanner-bundles/openvas-scanner:23.30.1
     profiles:
       - hvs
     restart: always
@@ -409,7 +408,7 @@ services:
     depends_on:
       - pg-gvm
   ovasagent:
-    image: ${REGISTRY:-098915869641.dkr.ecr.us-east-1.amazonaws.com}/containerized-scanner-bundles/ovasagent:1.0.369-staging-ff4edeed-ff4edeed7924bf0a6a545c996deee15e1adbb89c
+    image: ${REGISTRY:-098915869641.dkr.ecr.us-east-1.amazonaws.com}/containerized-scanner-bundles/ovasagent:2.2.8
     restart: always
     profiles:
       - hvs
@@ -442,12 +441,12 @@ services:
       gvmd:
         condition: service_started
   outboundagent:
-    image: ${REGISTRY:-098915869641.dkr.ecr.us-east-1.amazonaws.com}/containerized-scanner-bundles/outboundagent:1.0.12171-staging-c6c39bec-c6c39bec93ad612afb2072e2c02824e49953e5e9
+    image: ${REGISTRY:-098915869641.dkr.ecr.us-east-1.amazonaws.com}/containerized-scanner-bundles/outboundagent:2.3.14
     restart: always
-    profiles:
-      - outboundagent
     volumes:
       - shared-data:/shared:z
+    profiles:
+      - outboundagent
     environment:
       KRONOS_API_URL: "${UNI5_API_URL}"
       KRONOS_API_KEY: "${UNI5_API_KEY}"
@@ -458,8 +457,6 @@ services:
       - 8081:8081
       - 8083:8083
 volumes:
-  BURP_DATA:
-  BURP_USERPREFS:
   gpg_data_vol:
   scap_data_vol:
   cert_data_vol:
