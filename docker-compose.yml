@@ -1,6 +1,6 @@
 services:
   external-agent:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/external-agent:1.0
+    image: ""
     restart: on-failure
     profiles:
       - externalagent
@@ -157,7 +157,7 @@ services:
       - 1337:1337
       - 8080:8080 #Burp Default Port
   genericagent:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/genericagent:2.0.5
+    image: ""
     restart: always
     profiles:
       - aspm
