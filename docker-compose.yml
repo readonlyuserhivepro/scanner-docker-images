@@ -160,7 +160,7 @@ services:
       - BURP_DATA:/root/.BurpSuite
       - BURP_USERPREFS:/root/.java/.userPrefs
   genericagent:
-    image: ${REGISTRY}/containerized-scanner-bundles/genericagent:2.0.5-567d489
+    image: ${REGISTRY}/containerized-scanner-bundles/genericagent:2.0.7-1e407ab
     restart: always
     profiles:
       - aspm
