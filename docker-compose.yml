@@ -1,6 +1,6 @@
 services:
   external-agent:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/external-agent:1.0
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/external-agent:2.0.6
     restart: on-failure
     profiles:
       - externalagent
@@ -157,7 +157,7 @@ services:
       - 1337:1337
       - 8080:8080 #Burp Default Port
   genericagent:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/genericagent:2.0.5
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/genericagent:2.0.6
     restart: always
     profiles:
       - aspm
@@ -408,7 +408,7 @@ services:
     depends_on:
       - pg-gvm
   ovasagent:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/ovasagent:2.3.0
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/ovasagent:2.3.2
     restart: always
     profiles:
       - hvs
@@ -441,7 +441,7 @@ services:
       gvmd:
         condition: service_started
   outboundagent:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/outboundagent:2.3.16
+    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/outboundagent:2.3.17
     restart: always
     volumes:
       - shared-data:/shared:z
