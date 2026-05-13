@@ -406,7 +406,7 @@ services:
     depends_on:
       - pg-gvm
   ovasagent:
-    image: ${REGISTRY}/containerized-scanner-bundles/ovasagent:1.0.387-dev-1439122b-1439122bc46f125806ba0dfb5ab7b8781e59fd89
+    image: ${REGISTRY}/containerized-scanner-bundles/ovasagent:1.0.388-dev-3c887f25-3c887f25fd0d3a453cd873b61aa2779207fdb9cd
     restart: always
     profiles:
       - hvs
