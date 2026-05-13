@@ -1,6 +1,6 @@
 services:
   external-agent:
-    image: ${REGISTRY}/containerized-scanner-bundles/external-agent:1.0
+    image: 767398110122.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/external-agent:2.0.7-df73808
     restart: on-failure
     profiles:
       - externalagent
@@ -160,7 +160,7 @@ services:
       - BURP_DATA:/root/.BurpSuite
       - BURP_USERPREFS:/root/.java/.userPrefs
   genericagent:
-    image: ${REGISTRY}/containerized-scanner-bundles/genericagent:2.0.7-1e407ab
+    image: 767398110122.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/genericagent:2.0.7-df73808
     restart: always
     profiles:
       - aspm
