@@ -1,6 +1,6 @@
 services:
   external-agent:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/external-agent:2.0.6
+    image: ${REGISTRY}/containerized-scanner-bundles/external-agent:2.0.6
     restart: on-failure
     profiles:
       - externalagent
@@ -12,7 +12,7 @@ services:
       UNI5XPOSUREHOST: "${UNI5XPOSUREHOST}"
   # 1. Initialise DB with Random Pass
   mariadb-configurator:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/mariadb-configurator:1.0
+    image: ${REGISTRY}/containerized-scanner-bundles/mariadb-configurator:1.0
     restart: on-failure
     profiles:
       - aspm
@@ -20,7 +20,7 @@ services:
       - mariadb_pass_vol:/shared
       # 2. Actual MariaDB
   hpmariadb:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/mariadb:10.4
+    image: ${REGISTRY}/containerized-scanner-bundles/mariadb:10.4
     restart: always
     depends_on:
       mariadb-configurator:
@@ -43,7 +43,7 @@ services:
       timeout: 5s
       retries: 3
   mariadbupdater:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/mariadb-updater:6.5.0
+    image: ${REGISTRY}/containerized-scanner-bundles/mariadb-updater:6.5.0
     restart: no
     profiles:
       - aspm
@@ -55,7 +55,7 @@ services:
       - mariadb_pass_vol:/shared
       # 3. Once DB is Up Check for Configs to SetUp other Tools
   dbconnector:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/dbconnector:1.1
+    image: ${REGISTRY}/containerized-scanner-bundles/dbconnector:1.1
     restart: no
     environment:
       DBHOST: "hpmariadb"
@@ -71,7 +71,7 @@ services:
       - zap_config_vol:/zap
       # 4. Once DBConnector Creates Necessary Startup Files Start Mobsf
   mobsf:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/mobsf:v4.4.2
+    image: ${REGISTRY}/containerized-scanner-bundles/mobsf:v4.4.2
     restart: always
     profiles:
       - aspm
@@ -90,7 +90,7 @@ services:
       retries: 5
       # 5. Once DBConnector Creates Necessary Startup Files Start ZAP
   zap:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/zap:2.17.0
+    image: ${REGISTRY}/containerized-scanner-bundles/zap:2.17.0
     restart: always
     profiles:
       - aspm
@@ -108,7 +108,7 @@ services:
   # 6 SONARQUBE
 
   sonarqube:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/sonarqube:25.8.0.112029-community
+    image: ${REGISTRY}/containerized-scanner-bundles/sonarqube:25.8.0.112029-community
     restart: always
     profiles:
       - aspm
@@ -127,7 +127,7 @@ services:
       - sonarqube_logs_vol:/opt/sonarqube/logs
       - sonarqube_temp_vol:/opt/sonarqube/temp
   sonardb:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/postgres:15
+    image: ${REGISTRY}/containerized-scanner-bundles/postgres:15
     restart: always
     profiles:
       - aspm
@@ -146,7 +146,7 @@ services:
       - postgresql_vol:/var/lib/postgresql
       - postgresql_data_vol:/var/lib/postgresql/data
   burp:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/burp-suite-pro:2025.11.6
+    image: ${REGISTRY}/containerized-scanner-bundles/burp-suite-pro:2025.11.6
     restart: always
     profiles:
       - burp
@@ -157,7 +157,7 @@ services:
       - 1337:1337
       - 8080:8080 #Burp Default Port
   genericagent:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/genericagent:2.0.6
+    image: ${REGISTRY}/containerized-scanner-bundles/genericagent:2.0.6
     restart: always
     profiles:
       - aspm
@@ -191,14 +191,14 @@ services:
       - 9096:9096
       #7 HVS
   redis-server:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/redis-server:24
+    image: ${REGISTRY}/containerized-scanner-bundles/redis-server:24
     profiles:
       - hvs
     restart: always
     volumes:
       - redis_socket_vol:/run/redis/
   pg-gvm:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/pg-gvm:22.6.10
+    image: ${REGISTRY}/containerized-scanner-bundles/pg-gvm:22.6.10
     profiles:
       - hvs
     restart: always
@@ -208,41 +208,41 @@ services:
   vulnerability-tests:
     profiles:
       - hvs
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/vulnerability-tests
+    image: ${REGISTRY}/containerized-scanner-bundles/vulnerability-tests
     volumes:
       - vt_data_vol:/mnt
   notus-data:
     profiles:
       - hvs
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/notus-data
+    image: ${REGISTRY}/containerized-scanner-bundles/notus-data
     volumes:
       - notus_data_vol:/mnt
   scap-data:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/scap-data
+    image: ${REGISTRY}/containerized-scanner-bundles/scap-data
     profiles:
       - hvs
     volumes:
       - scap_data_vol:/mnt
   data-objects:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/data-objects
+    image: ${REGISTRY}/containerized-scanner-bundles/data-objects
     profiles:
       - hvs
     volumes:
       - data_objects_vol:/mnt
   cert-bund-data:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/cert-data
+    image: ${REGISTRY}/containerized-scanner-bundles/cert-data
     profiles:
       - hvs
     volumes:
       - cert_data_vol:/mnt
   gpg-data:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/gpg-data
+    image: ${REGISTRY}/containerized-scanner-bundles/gpg-data
     profiles:
       - hvs
     volumes:
       - gpg_data_vol:/mnt
   gvmd:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/gvmd:26.6.0
+    image: ${REGISTRY}/containerized-scanner-bundles/gvmd:26.6.0
     profiles:
       - hvs
     restart: always
@@ -274,7 +274,7 @@ services:
       vulnerability-tests:
         condition: service_completed_successfully
   gsa:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/gsa:26.2.0
+    image: ${REGISTRY}/containerized-scanner-bundles/gsa:26.2.0
     profiles:
       - gbui
     restart: always
@@ -288,7 +288,7 @@ services:
   # and changes log output to /var/log/openvas instead /var/log/gvm
   # to reduce likelyhood of unwanted log interferences
   configure-openvas:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/openvas-scanner:23.30.1
+    image: ${REGISTRY}/containerized-scanner-bundles/openvas-scanner:23.30.1
     restart: on-failure
     profiles:
       - hvs
@@ -308,7 +308,7 @@ services:
         chmod 666 /var/log/openvas/openvas.log
   # shows logs of openvas
   openvas:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/openvas-scanner:23.30.1
+    image: ${REGISTRY}/containerized-scanner-bundles/openvas-scanner:23.30.1
     profiles:
       - hvs
     restart: always
@@ -326,7 +326,7 @@ services:
       configure-openvas:
         condition: service_completed_successfully
   openvasd:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/openvas-scanner:23.30.1
+    image: ${REGISTRY}/containerized-scanner-bundles/openvas-scanner:23.30.1
     profiles:
       - hvs
     restart: always
@@ -360,7 +360,7 @@ services:
         aliases:
           - openvasd
   ospd-openvas:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/ospd-openvas:22.9.0
+    image: ${REGISTRY}/containerized-scanner-bundles/ospd-openvas:22.9.0
     profiles:
       - hvs
     restart: always
@@ -388,7 +388,7 @@ services:
       vulnerability-tests:
         condition: service_completed_successfully
   gvm-tools:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/gvm-tools
+    image: ${REGISTRY}/containerized-scanner-bundles/gvm-tools
     profiles:
       - hvs-tools
     volumes:
@@ -398,7 +398,7 @@ services:
       - gvmd
       - ospd-openvas
   index-fix:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/index-fix:1.1
+    image: ${REGISTRY}/containerized-scanner-bundles/index-fix:1.1
     restart: always
     profiles:
       - hvs
@@ -408,7 +408,7 @@ services:
     depends_on:
       - pg-gvm
   ovasagent:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/ovasagent:2.3.2
+    image: ${REGISTRY}/containerized-scanner-bundles/ovasagent:2.3.2
     restart: always
     profiles:
       - hvs
@@ -441,7 +441,7 @@ services:
       gvmd:
         condition: service_started
   outboundagent:
-    image: 098915869641.dkr.ecr.us-east-1.amazonaws.com/containerized-scanner-bundles/outboundagent:2.3.17
+    image: ${REGISTRY}/containerized-scanner-bundles/outboundagent:2.3.17
     restart: always
     volumes:
       - shared-data:/shared:z
