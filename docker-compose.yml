@@ -324,7 +324,7 @@ services:
       configure-openvas:
         condition: service_completed_successfully
   openvasd:
-    image: ${REGISTRY}/containerized-scanner-bundles/openvas-scanner:23.8.2
+    image: ${REGISTRY}/containerized-scanner-bundles/openvas-scanner:23.30.1
     profiles:
       - hvs
     restart: always
