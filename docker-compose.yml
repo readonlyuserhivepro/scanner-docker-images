@@ -295,7 +295,6 @@ services:
     volumes:
       - openvas_data_vol:/mnt
       - openvas_log_data_vol:/var/log/openvas
-
     command:
       - /bin/sh
       - -c
@@ -315,7 +314,6 @@ services:
     volumes:
       - openvas_data_vol:/etc/openvas
       - openvas_log_data_vol:/var/log/openvas
-
     command:
       - /bin/sh
       - -c
@@ -408,7 +406,7 @@ services:
     depends_on:
       - pg-gvm
   ovasagent:
-    image: ${REGISTRY}/containerized-scanner-bundles/ovasagent:2.3.2
+    image: ${REGISTRY}/containerized-scanner-bundles/ovasagent:2.3.3
     restart: always
     profiles:
       - hvs
