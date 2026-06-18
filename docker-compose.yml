@@ -1,6 +1,6 @@
 services:
   external-agent:
-    image: ${REGISTRY}/containerized-scanner-bundles/external-agent:2.0.6
+    image: ${REGISTRY}/containerized-scanner-bundles/external-agent:2.0.7
     restart: on-failure
     profiles:
       - externalagent
@@ -157,7 +157,7 @@ services:
       - 1337:1337
       - 8080:8080 #Burp Default Port
   genericagent:
-    image: ${REGISTRY}/containerized-scanner-bundles/genericagent:2.0.6
+    image: ${REGISTRY}/containerized-scanner-bundles/genericagent:2.0.7
     restart: always
     profiles:
       - aspm
@@ -295,7 +295,6 @@ services:
     volumes:
       - openvas_data_vol:/mnt
       - openvas_log_data_vol:/var/log/openvas
-
     command:
       - /bin/sh
       - -c
@@ -315,7 +314,6 @@ services:
     volumes:
       - openvas_data_vol:/etc/openvas
       - openvas_log_data_vol:/var/log/openvas
-
     command:
       - /bin/sh
       - -c
@@ -408,7 +406,7 @@ services:
     depends_on:
       - pg-gvm
   ovasagent:
-    image: ${REGISTRY}/containerized-scanner-bundles/ovasagent:2.3.2
+    image: ${REGISTRY}/containerized-scanner-bundles/ovasagent:2.3.3
     restart: always
     profiles:
       - hvs
@@ -441,7 +439,7 @@ services:
       gvmd:
         condition: service_started
   outboundagent:
-    image: ${REGISTRY}/containerized-scanner-bundles/outboundagent:2.3.17
+    image: ${REGISTRY}/containerized-scanner-bundles/outboundagent:2.3.18
     restart: always
     volumes:
       - shared-data:/shared:z
