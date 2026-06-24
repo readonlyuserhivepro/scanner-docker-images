@@ -1,6 +1,6 @@
 services:
   external-agent:
-    image: "${REGISTRY}/containerized-scanner-bundles/external-agent:2.0.7-fff6cdb"
+    image: "${REGISTRY}/containerized-scanner-bundles/external-agent:2.0.8-c4f6a49"
     restart: on-failure
     profiles:
       - externalagent
@@ -157,7 +157,7 @@ services:
       - 1337:1337
       - 8080:8080 #Burp Default Port
   genericagent:
-    image: "${REGISTRY}/containerized-scanner-bundles/genericagent:2.0.7-fff6cdb"
+    image: "${REGISTRY}/containerized-scanner-bundles/genericagent:2.0.8-c4f6a49"
     restart: always
     profiles:
       - aspm
