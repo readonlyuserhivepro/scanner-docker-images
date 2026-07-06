@@ -1,4 +1,6 @@
 HVS/*.env
 ASPM/*.env
+EXTERNAL_AGENT/*.env
+BASAGENT/*.env
 *.env
 *.tar.gz
