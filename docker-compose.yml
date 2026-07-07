@@ -1,6 +1,6 @@
 services:
   external-agent:
-    image: ${REGISTRY}/containerized-scanner-bundles/external-agent:2.0.8-6516aaa
+    image: ${REGISTRY}/containerized-scanner-bundles/external-agent:2.0.9-f621348
     restart: on-failure
     profiles:
       - externalagent
@@ -160,7 +160,7 @@ services:
       - BURP_DATA:/root/.BurpSuite
       - BURP_USERPREFS:/root/.java/.userPrefs
   genericagent:
-    image: ${REGISTRY}/containerized-scanner-bundles/genericagent:2.0.8-6516aaa
+    image: ${REGISTRY}/containerized-scanner-bundles/genericagent:2.0.9-f621348
     restart: always
     profiles:
       - aspm
