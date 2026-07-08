@@ -7,7 +7,6 @@ services:
     environment:
       - BAS_API_KEY=${BAS_API_KEY}
       - BAS_URL=${BAS_URL}
-
   external-agent:
     image: "${REGISTRY}/containerized-scanner-bundles/external-agent:2.0.9-a4cde65"
     restart: on-failure
@@ -448,7 +447,7 @@ services:
       gvmd:
         condition: service_started
   outboundagent:
-    image: ${REGISTRY}/containerized-scanner-bundles/outboundagent:1.0.13229-dev-d523ca28-d523ca285585ad06bdd198f31406cf94e894bc29
+    image: ${REGISTRY}/containerized-scanner-bundles/outboundagent:1.0.13230-dev-233cbf92-233cbf92bd4fa97bcad9f4e10245416b36b04dc6
     restart: always
     profiles:
       - outboundagent
