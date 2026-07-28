@@ -7,6 +7,7 @@ services:
     environment:
       - BAS_API_KEY=${BAS_API_KEY}
       - BAS_URL=${BAS_URL}
+      - AGENT_KEY=${AGENT_KEY}
   external-agent:
     image: "${REGISTRY}/containerized-scanner-bundles/external-agent:2.0.9-a4cde65"
     restart: on-failure
