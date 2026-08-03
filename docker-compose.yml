@@ -455,7 +455,7 @@ services:
       - 8081:8081
       - 8083:8083
   bas-agent:
-    image: ${REGISTRY}/containerized-scanner-bundles/bas-agent:2.0_linux
+    image: ${REGISTRY}/containerized-scanner-bundles/bas-agent:2.0.14
 volumes:
   gpg_data_vol:
   scap_data_vol:
