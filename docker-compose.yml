@@ -1,4 +1,13 @@
 services:
+  bas-agent:
+    image: ${REGISTRY}/containerized-scanner-bundles/bas-agent:2.0_linux-339192b
+    restart: unless-stopped
+    profiles:
+      - basagent
+    environment:
+      - BAS_API_KEY=${BAS_API_KEY}
+      - BAS_URL=${BAS_URL}
+      - AGENT_KEY=${AGENT_KEY}
   external-agent:
     image: ${REGISTRY}/containerized-scanner-bundles/external-agent:2.0.9
     restart: on-failure
@@ -454,8 +463,6 @@ services:
     ports:
       - 8081:8081
       - 8083:8083
-  bas-agent:
-    image: ${REGISTRY}/containerized-scanner-bundles/bas-agent:2.0.14
 volumes:
   gpg_data_vol:
   scap_data_vol:
