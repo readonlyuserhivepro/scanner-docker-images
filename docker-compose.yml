@@ -1,6 +1,15 @@
 services:
+  bas-agent:
+    image: ${REGISTRY}/containerized-scanner-bundles/bas-agent:2.0.14
+    restart: unless-stopped
+    profiles:
+      - basagent
+    environment:
+      - BAS_API_KEY=${BAS_API_KEY}
+      - BAS_URL=${BAS_URL}
+      - AGENT_KEY=${AGENT_KEY}
   external-agent:
-    image: ${REGISTRY}/containerized-scanner-bundles/external-agent:2.0.8
+    image: ${REGISTRY}/containerized-scanner-bundles/external-agent:2.0.9
     restart: on-failure
     profiles:
       - externalagent
@@ -157,7 +166,7 @@ services:
       - 1337:1337
       - 8080:8080 #Burp Default Port
   genericagent:
-    image: ${REGISTRY}/containerized-scanner-bundles/genericagent:2.0.8
+    image: ${REGISTRY}/containerized-scanner-bundles/genericagent:2.0.9
     restart: always
     profiles:
       - aspm
@@ -406,7 +415,7 @@ services:
     depends_on:
       - pg-gvm
   ovasagent:
-    image: ${REGISTRY}/containerized-scanner-bundles/ovasagent:2.3.3
+    image: ${REGISTRY}/containerized-scanner-bundles/ovasagent:2.3.4
     restart: always
     profiles:
       - hvs
@@ -439,7 +448,7 @@ services:
       gvmd:
         condition: service_started
   outboundagent:
-    image: ${REGISTRY}/containerized-scanner-bundles/outboundagent:2.3.18
+    image: ${REGISTRY}/containerized-scanner-bundles/outboundagent:2.3.19
     restart: always
     volumes:
       - shared-data:/shared:z
