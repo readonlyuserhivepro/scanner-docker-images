@@ -448,7 +448,7 @@ services:
       gvmd:
         condition: service_started
   outboundagent:
-    image: ${REGISTRY}/containerized-scanner-bundles/outboundagent:1.0.13559-dev-8c652ea5-8c652ea59ba84abe12bbedf135c4027a36dab5a6
+    image: ${REGISTRY}/containerized-scanner-bundles/outboundagent:1.0.13561-dev-6cc4ca4a-6cc4ca4a4e2ba7de517578a702ab4a01d7e24933
     restart: always
     profiles:
       - outboundagent
