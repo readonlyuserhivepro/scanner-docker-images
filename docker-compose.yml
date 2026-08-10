@@ -1,6 +1,6 @@
 services:
   bas-agent:
-    image: ${REGISTRY}/containerized-scanner-bundles/bas-agent:2.0_linux-339192b
+    image: ${REGISTRY}/containerized-scanner-bundles/bas-agent:2.0_linux-ec9b72f7
     restart: unless-stopped
     profiles:
       - basagent
