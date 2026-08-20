@@ -1,6 +1,6 @@
 services:
   bas-agent:
-    image: ${REGISTRY}/containerized-scanner-bundles/bas-agent:2.0.14
+    image: ${REGISTRY}/containerized-scanner-bundles/bas-agent:2.0.15
     restart: unless-stopped
     profiles:
       - basagent
@@ -378,7 +378,8 @@ services:
     security_opt:
       - seccomp=unconfined
       - apparmor=unconfined
-    command: ["ospd-openvas", "-f", "--config", "/etc/gvm/ospd-openvas.conf", "--notus-feed-dir", "/var/lib/notus/advisories", "-m", "666"]
+    command: ["ospd-openvas", "-f", "--config", "/etc/gvm/ospd-openvas.conf", "--notus-feed-dir",
+      "/var/lib/notus/advisories", "-m", "666"]
     volumes:
       - gpg_data_vol:/etc/openvas/gnupg
       - vt_data_vol:/var/lib/openvas/plugins
