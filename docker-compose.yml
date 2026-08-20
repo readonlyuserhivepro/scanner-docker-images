@@ -382,8 +382,7 @@ services:
     security_opt:
       - seccomp=unconfined
       - apparmor=unconfined
-    command: ["ospd-openvas", "-f", "--config", "/etc/gvm/ospd-openvas.conf", "--notus-feed-dir",
-      "/var/lib/notus/advisories", "-m", "666"]
+    command: ["ospd-openvas", "-f", "--config", "/etc/gvm/ospd-openvas.conf", "--notus-feed-dir", "/var/lib/notus/advisories", "-m", "666"]
     volumes:
       - gpg_data_vol:/etc/openvas/gnupg
       - vt_data_vol:/var/lib/openvas/plugins
@@ -453,7 +452,7 @@ services:
       gvmd:
         condition: service_started
   outboundagent:
-    image: ${REGISTRY}/containerized-scanner-bundles/outboundagent:1.0.13700-dev-383332b2-383332b2a68bb3b24b6362d16463f63c3b647532
+    image: ${REGISTRY}/containerized-scanner-bundles/outboundagent:1.0.13706-dev-8bda552c-8bda552c5556915d32c4feb193a409d896137b1f
     restart: always
     profiles:
       - outboundagent
