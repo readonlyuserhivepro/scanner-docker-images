@@ -1,6 +1,6 @@
 services:
   bas-agent:
-    image: ${REGISTRY}/containerized-scanner-bundles/bas-agent:2.0.14
+    image: ${REGISTRY}/containerized-scanner-bundles/bas-agent:2.0.16
     restart: unless-stopped
     profiles:
       - basagent
@@ -8,6 +8,10 @@ services:
       - BAS_API_KEY=${BAS_API_KEY}
       - BAS_URL=${BAS_URL}
       - AGENT_KEY=${AGENT_KEY}
+      - BAS_PROXY_HOST=${BAS_PROXY_HOST}
+      - BAS_PROXY_PORT=${BAS_PROXY_PORT}
+      - BAS_PROXY_USERNAME=${BAS_PROXY_USERNAME}
+      - BAS_PROXY_PASSWORD=${BAS_PROXY_PASSWORD}
   external-agent:
     image: ${REGISTRY}/containerized-scanner-bundles/external-agent:2.0.9
     restart: on-failure
@@ -448,7 +452,7 @@ services:
       gvmd:
         condition: service_started
   outboundagent:
-    image: ${REGISTRY}/containerized-scanner-bundles/outboundagent:2.3.19
+    image: ${REGISTRY}/containerized-scanner-bundles/outboundagent:2.3.20
     restart: always
     volumes:
       - shared-data:/shared:z
