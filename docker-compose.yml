@@ -13,7 +13,7 @@ services:
       - BAS_PROXY_USERNAME=${BAS_PROXY_USERNAME}
       - BAS_PROXY_PASSWORD=${BAS_PROXY_PASSWORD}
   external-agent:
-    image: "${REGISTRY}/containerized-scanner-bundles/external-agent:2.0.10-cda658a"
+    image: "${REGISTRY}/containerized-scanner-bundles/external-agent:2.0.10-cb6e4c9"
     restart: on-failure
     profiles:
       - externalagent
@@ -170,7 +170,7 @@ services:
       - 1337:1337
       - 8080:8080 #Burp Default Port
   genericagent:
-    image: "${REGISTRY}/containerized-scanner-bundles/genericagent:2.0.10-cda658a"
+    image: "${REGISTRY}/containerized-scanner-bundles/genericagent:2.0.10-cb6e4c9"
     restart: always
     profiles:
       - aspm
