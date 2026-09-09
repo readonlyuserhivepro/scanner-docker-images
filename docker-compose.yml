@@ -5,13 +5,13 @@ services:
     profiles:
       - basagent
     environment:
-      - BAS_API_KEY=${BAS_API_KEY}
-      - BAS_URL=${BAS_URL}
-      - AGENT_KEY=${AGENT_KEY}
-      - BAS_PROXY_HOST=${BAS_PROXY_HOST}
-      - BAS_PROXY_PORT=${BAS_PROXY_PORT}
-      - BAS_PROXY_USERNAME=${BAS_PROXY_USERNAME}
-      - BAS_PROXY_PASSWORD=${BAS_PROXY_PASSWORD}
+      - BAS_API_KEY=${BAS_API_KEY:-}
+      - BAS_URL=${BAS_URL:-}
+      - AGENT_KEY=${AGENT_KEY:-}
+      - BAS_PROXY_HOST=${BAS_PROXY_HOST:-}
+      - BAS_PROXY_PORT=${BAS_PROXY_PORT:-}
+      - BAS_PROXY_USERNAME=${BAS_PROXY_USERNAME:-}
+      - BAS_PROXY_PASSWORD=${BAS_PROXY_PASSWORD:-}
   external-agent:
     image: "${REGISTRY}/containerized-scanner-bundles/external-agent:2.0.10-c27f7dd"
     restart: on-failure
@@ -20,9 +20,9 @@ services:
     ports:
       - 1096:9096
     environment:
-      CLIENTID: "${CLIENTID}"
-      CLIENTSECRET: "${CLIENTSECRET}"
-      UNI5XPOSUREHOST: "${UNI5XPOSUREHOST}"
+      CLIENTID: "${CLIENTID:-}"
+      CLIENTSECRET: "${CLIENTSECRET:-}"
+      UNI5XPOSUREHOST: "${UNI5XPOSUREHOST:-}"
       # 1. Initialise DB with Random Pass
   mariadb-configurator:
     image: ${REGISTRY}/containerized-scanner-bundles/mariadb-configurator:1.0
@@ -189,9 +189,9 @@ services:
       - NET_ADMIN # for capturing packages in promiscuous mode
       - NET_RAW # for raw sockets e.g. used for the boreas alive detection
     environment:
-      CLIENTID: "${CLIENTID}"
-      CLIENTSECRET: "${CLIENTSECRET}"
-      UNI5XPOSUREHOST: "${UNI5XPOSUREHOST}"
+      CLIENTID: "${CLIENTID:-}"
+      CLIENTSECRET: "${CLIENTSECRET:-}"
+      UNI5XPOSUREHOST: "${UNI5XPOSUREHOST:-}"
       DBHOST: "hpmariadb"
     security_opt:
       - seccomp=unconfined
@@ -427,11 +427,11 @@ services:
       - 9081:9081
     environment:
       GVM_CLI_USERNAME: admin
-      UNI5_API_URL: "${UNI5_API_URL}"
-      UNI5_API_KEY: "${UNI5_API_KEY}"
+      UNI5_API_URL: "${UNI5_API_URL:-}"
+      UNI5_API_KEY: "${UNI5_API_KEY:-}"
       # API_KEY: "CreDridKotJafcicsIsBokGi"
       PROFILE: "production"
-      HOST_IP: "${HOST_IP}"
+      HOST_IP: "${HOST_IP:-}"
       # SPRING_PROFILES_ACTIVE:"production" // For Setting the ACTIVE PROFILE
     volumes:
       - vt_data_vol:/var/lib/openvas/plugins:z
@@ -459,11 +459,11 @@ services:
     volumes:
       - shared-data:/shared:z
     environment:
-      KRONOS_API_URL: "${UNI5_API_URL}"
-      KRONOS_API_KEY: "${UNI5_API_KEY}"
+      KRONOS_API_URL: "${UNI5_API_URL:-}"
+      KRONOS_API_KEY: "${UNI5_API_KEY:-}"
       JAVA_OPTS: "-Doptions.package-manager.enabled=false -Dserver.address=127.0.0.1"
       # SPRING_PROFILES_ACTIVE: ""
-      HOST_IP: "${HOST_IP}"
+      HOST_IP: "${HOST_IP:-}"
     ports:
       - 8081:8081
       - 8083:8083
