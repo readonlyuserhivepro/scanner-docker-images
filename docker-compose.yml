@@ -452,7 +452,7 @@ services:
       gvmd:
         condition: service_started
   outboundagent:
-    image: ${REGISTRY}/containerized-scanner-bundles/outboundagent:1.0.14179-dev-4d181554-4d181554ec48be088cc86536b9353f885a729279
+    image: ${REGISTRY}/containerized-scanner-bundles/outboundagent:1.0.14184-dev-7edebaf3-7edebaf3dc6aefb5e6bec84b055ec05663e267b8
     restart: always
     profiles:
       - outboundagent
