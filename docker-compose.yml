@@ -13,7 +13,7 @@ services:
       - BAS_PROXY_USERNAME=${BAS_PROXY_USERNAME:-}
       - BAS_PROXY_PASSWORD=${BAS_PROXY_PASSWORD:-}
   external-agent:
-    image: ${REGISTRY}/containerized-scanner-bundles/external-agent:2.0.11-4727d2f
+    image: ${REGISTRY}/containerized-scanner-bundles/external-agent:2.0.11-0e8823a
     restart: on-failure
     profiles:
       - externalagent
@@ -173,7 +173,7 @@ services:
       - BURP_DATA:/root/.BurpSuite
       - BURP_USERPREFS:/root/.java/.userPrefs
   genericagent:
-    image: ${REGISTRY}/containerized-scanner-bundles/genericagent:2.0.11-4727d2f
+    image: ${REGISTRY}/containerized-scanner-bundles/genericagent:2.0.11-0e8823a
     restart: always
     profiles:
       - aspm
