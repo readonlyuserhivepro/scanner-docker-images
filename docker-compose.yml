@@ -452,7 +452,7 @@ services:
       gvmd:
         condition: service_started
   outboundagent:
-    image: ${REGISTRY}/containerized-scanner-bundles/outboundagent:2.3.23
+    image: ${REGISTRY}/containerized-scanner-bundles/outboundagent:2.3.24
     restart: always
     volumes:
       - shared-data:/shared:z
