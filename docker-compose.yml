@@ -2,6 +2,8 @@ services:
   bas-agent:
     image: ${REGISTRY}/containerized-scanner-bundles/bas-agent:2.0_linux-4f1e2b7e
     restart: unless-stopped
+    ports:
+      - 6443:6443
     profiles:
       - basagent
     environment:
