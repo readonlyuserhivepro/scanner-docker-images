@@ -302,7 +302,7 @@ services:
   # to reduce likelyhood of unwanted log interferences
 
   gsad:
-    image: ${REGISTRY}/containerized-scanner-bundles/gsad:stable
+    image: ${REGISTRY}/containerized-scanner-bundles/gsad:27.5.0
     profiles:
       - hvs
     deploy:
