@@ -317,7 +317,6 @@ services:
     depends_on:
       gvmd:
         condition: service_started
-
   configure-openvas:
     image: ${REGISTRY}/containerized-scanner-bundles/openvas-scanner:23.50.24
     restart: on-failure
@@ -470,7 +469,7 @@ services:
       gvmd:
         condition: service_started
   outboundagent:
-    image: ${REGISTRY}/containerized-scanner-bundles/outboundagent:1.0.14518-dev-9c370810-9c370810d8a52d6abd01a047472868319440c551
+    image: ${REGISTRY}/containerized-scanner-bundles/outboundagent:1.0.14519-dev-9c370810-9c370810d8a52d6abd01a047472868319440c551
     restart: always
     profiles:
       - outboundagent
