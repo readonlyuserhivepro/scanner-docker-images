@@ -207,14 +207,14 @@ services:
       - 9096:9096
       #7 HVS
   redis-server:
-    image: ${REGISTRY}/containerized-scanner-bundles/redis-server:24
+    image: ${REGISTRY}/containerized-scanner-bundles/redis-server:latest
     profiles:
       - hvs
     restart: always
     volumes:
       - redis_socket_vol:/run/redis/
   pg-gvm:
-    image: ${REGISTRY}/containerized-scanner-bundles/pg-gvm:22.6.10
+    image: ${REGISTRY}/containerized-scanner-bundles/pg-gvm:22.6.18
     profiles:
       - hvs
     restart: always
@@ -258,7 +258,7 @@ services:
     volumes:
       - gpg_data_vol:/mnt
   gvmd:
-    image: ${REGISTRY}/containerized-scanner-bundles/gvmd:26.6.0
+    image: ${REGISTRY}/containerized-scanner-bundles/gvmd:26.40.1
     profiles:
       - hvs
     restart: always
@@ -303,8 +303,26 @@ services:
   # Sets log level of openvas to the set LOG_LEVEL within the env
   # and changes log output to /var/log/openvas instead /var/log/gvm
   # to reduce likelyhood of unwanted log interferences
+
+  gsad:
+    image: ${REGISTRY}/containerized-scanner-bundles/gsad:27.5.0
+    profiles:
+      - hvs
+    deploy:
+      restart_policy:
+        condition: any
+    environment:
+      GSAD_HTTP_ONLY: "true"
+      GSAD_API_ONLY: "true"
+      GSAD_FOREGROUND: "true"
+    volumes:
+      - gvmd_socket_vol:/run/gvmd
+    depends_on:
+      gvmd:
+        condition: service_started
+
   configure-openvas:
-    image: ${REGISTRY}/containerized-scanner-bundles/openvas-scanner:23.30.1
+    image: ${REGISTRY}/containerized-scanner-bundles/openvas-scanner:23.50.24
     restart: on-failure
     profiles:
       - hvs
@@ -323,7 +341,7 @@ services:
         chmod 666 /var/log/openvas/openvas.log
   # shows logs of openvas
   openvas:
-    image: ${REGISTRY}/containerized-scanner-bundles/openvas-scanner:23.30.1
+    image: ${REGISTRY}/containerized-scanner-bundles/openvas-scanner:23.50.24
     profiles:
       - hvs
     restart: always
@@ -340,7 +358,7 @@ services:
       configure-openvas:
         condition: service_completed_successfully
   openvasd:
-    image: ${REGISTRY}/containerized-scanner-bundles/openvas-scanner:23.30.1
+    image: ${REGISTRY}/containerized-scanner-bundles/openvas-scanner:23.50.24
     profiles:
       - hvs
     restart: always
@@ -374,7 +392,7 @@ services:
         aliases:
           - openvasd
   ospd-openvas:
-    image: ${REGISTRY}/containerized-scanner-bundles/ospd-openvas:22.9.0
+    image: ${REGISTRY}/containerized-scanner-bundles/ospd-openvas:22.10.5
     profiles:
       - hvs
     restart: always
