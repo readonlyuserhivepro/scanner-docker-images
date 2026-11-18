@@ -221,6 +221,9 @@ services:
     volumes:
       - psql_data_vol:/var/lib/postgresql
       - psql_socket_vol:/var/run/postgresql
+    depends_on:
+      pg-gvm-migrator:
+        condition: service_completed_successfully
   vulnerability-tests:
     profiles:
       - hvs
@@ -303,6 +306,15 @@ services:
   # Sets log level of openvas to the set LOG_LEVEL within the env
   # and changes log output to /var/log/openvas instead /var/log/gvm
   # to reduce likelyhood of unwanted log interferences
+
+  pg-gvm-migrator:
+    image: ${REGISTRY}/containerized-scanner-bundles/pg-gvm-migrator:stable
+    deploy:
+      restart_policy:
+        condition: none
+    volumes:
+      - psql_data_vol:/var/lib/postgresql
+      - psql_socket_vol:/var/run/postgresql
 
   gsad:
     image: ${REGISTRY}/containerized-scanner-bundles/gsad:27.5.0
