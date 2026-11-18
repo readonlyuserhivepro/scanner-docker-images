@@ -312,7 +312,6 @@ services:
     volumes:
       - psql_data_vol:/var/lib/postgresql
       - psql_socket_vol:/var/run/postgresql
-
   gsad:
     image: ${REGISTRY}/containerized-scanner-bundles/gsad:27.5.0
     profiles:
@@ -481,7 +480,7 @@ services:
       gvmd:
         condition: service_started
   outboundagent:
-    image: ${REGISTRY}/containerized-scanner-bundles/outboundagent:1.0.14574-dev-a5cda856-a5cda8564c69db7273aeb122e525730e3c6dbf02
+    image: ${REGISTRY}/containerized-scanner-bundles/outboundagent:1.0.14584-dev-74d037e5-74d037e5622c674938419ca64b3534ecc6524558
     restart: always
     profiles:
       - outboundagent
