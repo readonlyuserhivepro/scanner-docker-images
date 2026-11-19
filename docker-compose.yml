@@ -315,7 +315,6 @@ services:
     volumes:
       - psql_data_vol:/var/lib/postgresql
       - psql_socket_vol:/var/run/postgresql
-
   gsad:
     image: ${REGISTRY}/containerized-scanner-bundles/gsad:27.5.0
     profiles:
@@ -332,7 +331,6 @@ services:
     depends_on:
       gvmd:
         condition: service_started
-
   configure-openvas:
     image: ${REGISTRY}/containerized-scanner-bundles/openvas-scanner:23.50.24
     restart: on-failure
@@ -485,7 +483,7 @@ services:
       gvmd:
         condition: service_started
   outboundagent:
-    image: ${REGISTRY}/containerized-scanner-bundles/outboundagent:1.0.14545-staging-3ea3d64c-3ea3d64ced2b354aea50ae0b0bdc452672d32d81
+    image: ${REGISTRY}/containerized-scanner-bundles/outboundagent:1.0.14596-staging-dc41b74c-dc41b74cef7773d87c6ee575a192cf138e442244
     restart: always
     profiles:
       - outboundagent
