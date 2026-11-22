@@ -227,35 +227,35 @@ services:
   vulnerability-tests:
     profiles:
       - hvs
-    image: ${REGISTRY}/containerized-scanner-bundles/vulnerability-tests
+    image: ${REGISTRY}/containerized-scanner-bundles/vulnerability-tests:26.11
     volumes:
       - vt_data_vol:/mnt
   notus-data:
     profiles:
       - hvs
-    image: ${REGISTRY}/containerized-scanner-bundles/notus-data
+    image: ${REGISTRY}/containerized-scanner-bundles/notus-data:26.11
     volumes:
       - notus_data_vol:/mnt
   scap-data:
-    image: ${REGISTRY}/containerized-scanner-bundles/scap-data
+    image: ${REGISTRY}/containerized-scanner-bundles/scap-data:26.11
     profiles:
       - hvs
     volumes:
       - scap_data_vol:/mnt
   data-objects:
-    image: ${REGISTRY}/containerized-scanner-bundles/data-objects
+    image: ${REGISTRY}/containerized-scanner-bundles/data-objects:26.11
     profiles:
       - hvs
     volumes:
       - data_objects_vol:/mnt
   cert-bund-data:
-    image: ${REGISTRY}/containerized-scanner-bundles/cert-data
+    image: ${REGISTRY}/containerized-scanner-bundles/cert-data:26.11
     profiles:
       - hvs
     volumes:
       - cert_data_vol:/mnt
   gpg-data:
-    image: ${REGISTRY}/containerized-scanner-bundles/gpg-data
+    image: ${REGISTRY}/containerized-scanner-bundles/gpg-data:26.11
     profiles:
       - hvs
     volumes:
